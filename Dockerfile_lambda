@@ -5,7 +5,7 @@ WORKDIR /app
 COPY ./ ./
 
 RUN apk add --update --no-cache git
-RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-s -w" -ldflags "-X main.version=${VERSION}" -o "dist/fourkeys_lambda" github.com/vimeda/fourkeys/cmd/lambda
+RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-s -w" -ldflags "-X main.version=${VERSION}" -o "dist/fourkeys_lambda" github.com/italolelis/fourkeys/cmd/lambda
 
 # ---
 
