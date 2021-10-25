@@ -5,13 +5,22 @@ changelog:
     authors:
       - octocat
   categories:
-    - title: '🚀 Features'
+    - title: 🚀 New features
       labels:
-        - 'feature'
-        - 'enhancement'
-    - title: '🐛 Bug Fixes'
+        - "feature"
+    - title: 🐛 Bug Fixes
       labels:
-        - 'bug'
-    - title: '🧰 Maintenance'
+        - "bug"
+    - title: 🧰 Maintenance
       labels:
-        - 'documentation'
+        - "maintenance"
+    - title: 📦 Dependency Updates
+      labels:
+        - "dependencies"
+        - "security"
+    - title: 📖 Documentation
+      labels:
+        - "docs"
+    - title: Other Changes
+      labels:
+        - "*"
