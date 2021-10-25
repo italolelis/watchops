@@ -20,15 +20,15 @@ updates:
     schedule:
       interval: "weekly"
     assignees:
-      - "vimeda/platform"
+      - "italolelis"
     reviewers: 
-      - "vimeda/platform"
+      - "italolelis"
 
   - package-ecosystem: "terraform"
     directory: "/configs/terraform"
     schedule:
       interval: "weekly"
     assignees:
-      - "vimeda/platform"
+      - "italolelis"
     reviewers: 
-      - "vimeda/platform"
+      - "italolelis"
