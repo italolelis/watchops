@@ -1,0 +1,47 @@
+name: Pull Request
+on:
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  lint:
+    name: Linter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Lint Code Base
+        uses: docker://github/super-linter:v4
+        env:
+          DEFAULT_BRANCH: main
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_DOCKERFILE: true
+          VALIDATE_TERRAFORM_TFLINT: true
+          VALIDATE_TERRAFORM_TERRASCAN: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  test:
+    needs: [lint]
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Setup go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17.x
+        
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - uses: actions/cache@v2
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: Test
+      run: go test -v -cover ./...
