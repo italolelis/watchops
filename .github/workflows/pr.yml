@@ -18,8 +18,6 @@ jobs:
           DEFAULT_BRANCH: main
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_DOCKERFILE: true
-          VALIDATE_TERRAFORM_TFLINT: true
-          VALIDATE_TERRAFORM_TERRASCAN: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   test:

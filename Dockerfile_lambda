@@ -5,11 +5,11 @@ WORKDIR /app
 COPY ./ ./
 
 RUN apk add --update --no-cache git
-RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-s -w" -ldflags "-X main.version=${VERSION}" -o "dist/fourkeys_lambda" github.com/vimeda/fourkeys/cmd/lambda
+RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-s -w" -ldflags "-X main.version=${VERSION}" -o "dist/fourkeys_lambda" github.com/italolelis/fourkeys/cmd/lambda
 
 # ---
 
-FROM gcr.io/distroless/static
+FROM gcr.io/distroless/static:9ae716fb53c0728e15ff216e354744734bcf77d4
 
 COPY --from=builder /app/dist/fourkeys_lambda /
 
