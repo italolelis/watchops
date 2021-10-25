@@ -9,7 +9,7 @@ RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-s -w" -ldflags "-X
 
 # ---
 
-FROM gcr.io/distroless/static
+FROM gcr.io/distroless/static:latest
 
 COPY --from=builder /app/dist/fourkeys_lambda /
 
