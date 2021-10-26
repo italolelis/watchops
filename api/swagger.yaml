@@ -8,10 +8,10 @@ info:
     url: 'https://github.com/italolelis'
     email: me@italovietro.com
 servers:
-  - url: 'https://{environment}.lykon.io/fourkeys'
+  - url: 'https://{environment}/'
     variables:
       environment:
-        default: api.tools
+        default: staging
 paths:
   '/webhooks':
     post:
