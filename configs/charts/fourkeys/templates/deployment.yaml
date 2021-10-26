@@ -1,0 +1,93 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "fourkeys.fullname" . }}
+{{- with .Values.app.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+  labels:
+{{ include "fourkeys.labels" . | indent 4 }}
+{{- if .Values.app.labels }}
+{{ toYaml .Values.app.labels | indent 4 }}
+{{- end }}
+spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.app.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+    {{- include "fourkeys.selectorLabels" . | nindent 6 }}
+  strategy:
+{{ toYaml .Values.strategy | indent 4 }}
+  template:
+    metadata:
+      name: {{ template "fourkeys.fullname" . }}
+{{- if .Values.app.podAnnotations }}
+      annotations:
+{{ toYaml .Values.app.podAnnotations | indent 8 }}
+{{- end }}
+      labels:
+        {{- include "fourkeys.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.app.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ template "fourkeys.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.app.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.app.securityContext | nindent 12 }}
+          image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+          {{- if or (.Values.configMap) (.Values.secrets) }}
+          envFrom:
+          {{- if .Values.configMap }}
+            - configMapRef:
+                name: {{ template "fourkeys.fullname" . }}
+          {{- end }}
+          {{- if .Values.secrets }}
+            - secretRef:
+                name: {{ template "fourkeys.fullname" . }}
+          {{- end }}
+          {{- end }}
+          env:
+            - name: KUBERNETES_NODE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+          ports:
+          - name: http
+            containerPort: {{ .Values.app.port | default 8080 }}
+            protocol: {{ .Values.app.protocol | default "TCP" }}
+          - name: http-probe
+            containerPort: {{ .Values.app.probePort | default 9090 }}
+            protocol: {{ .Values.app.probeProtocol | default "TCP" }}
+        {{- if .Values.app.livenessProbe }}
+          livenessProbe:
+            {{- toYaml .Values.app.livenessProbe | nindent 12 }}
+        {{- end }}
+        {{- if .Values.app.readinessProbe }}
+          readinessProbe:
+            {{- toYaml .Values.app.readinessProbe | nindent 12 }}
+        {{- end }}
+        {{- if .Values.app.resources }}
+          resources:
+            {{- toYaml .Values.app.resources | nindent 12 }}
+        {{- end }}
+      {{- with .Values.app.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | indent 8 }}
+      {{- end }}
+      {{- with .Values.app.affinity }}
+      affinity:
+        {{- toYaml . | indent 8 }}
+      {{- end }}
+      {{- with .Values.app.tolerations }}
+      tolerations:
+        {{- toYaml . | indent 8 }}
+      {{- end }}

@@ -1,0 +1,15 @@
+{{- if .Values.rbac.pspEnabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ template "fourkeys.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "fourkeys.labels" $ | indent 4 }}
+rules:
+- apiGroups:      ['policy']
+  resources:      ['podsecuritypolicies']
+  verbs:          ['use']
+  resourceNames:  [{{ include "fourkeys.fullname" . }}]
+{{- end }}
