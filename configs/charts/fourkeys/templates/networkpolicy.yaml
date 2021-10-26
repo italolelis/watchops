@@ -1,0 +1,71 @@
+{{- if .Values.networkPolicy.enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "fourkeys.name" . }}-namespace-only
+  labels:
+    {{- include "fourkeys.labels" . | nindent 4 }}
+spec:
+  policyTypes:
+    - Ingress
+    - Egress
+  podSelector: {}
+  egress:
+    - to:
+        - podSelector: {}
+  ingress:
+    - from:
+        - podSelector: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "fourkeys.name" . }}-ingress
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "fourkeys.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "fourkeys.selectorLabels" . | nindent 6 }}
+  ingress:
+  {{- if .Values.networkPolicy.ingress.namespaceSelector }}
+  - from:
+    - namespaceSelector:
+      {{- toYaml .Values.networkPolicy.ingress.namespaceSelector | nindent 12 }}
+      {{- if .Values.networkPolicy.ingress.podSelector }}
+      podSelector:
+      {{- toYaml .Values.networkPolicy.ingress.podSelector | nindent 12 }}
+      {{- end }}
+    {{- end }}
+    ports:
+      - port: http
+        protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "fourkeys.name" . }}-egress-alertmanager
+  labels:
+    {{- include "fourkeys.labels" . | nindent 4 }}
+spec:
+  policyTypes:
+    - Egress
+  podSelector:
+    matchLabels:
+      {{- include "fourkeys.selectorLabels" . | nindent 6 }}
+  egress:
+    - ports:
+        - port: {{ .Values.networkPolicy.alertmanager.port }}
+          protocol: TCP
+  {{- if .Values.networkPolicy.alertmanager.namespaceSelector }}
+      to:
+        - namespaceSelector:
+          {{- toYaml .Values.networkPolicy.alertmanager.namespaceSelector | nindent 12 }}
+          {{- if .Values.networkPolicy.alertmanager.podSelector }}
+          podSelector:
+          {{- toYaml .Values.networkPolicy.alertmanager.podSelector | nindent 12 }}
+          {{- end }}
+  {{- end }}
+{{- end }}
