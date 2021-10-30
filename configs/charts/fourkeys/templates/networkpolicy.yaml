@@ -17,6 +17,7 @@ spec:
   ingress:
     - from:
         - podSelector: {}
+{{- if .Values.networkPolicy.ingress }}
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -30,10 +31,13 @@ spec:
     matchLabels:
       {{- include "fourkeys.selectorLabels" . | nindent 6 }}
   ingress:
-  {{- if .Values.networkPolicy.ingress.namespaceSelector }}
   - from:
+    {{- if .Values.networkPolicy.ingress.namespaceSelector }}
     - namespaceSelector:
       {{- toYaml .Values.networkPolicy.ingress.namespaceSelector | nindent 12 }}
+    {{- else }}
+    - namespaceSelector: {}
+    {{- end }}
       {{- if .Values.networkPolicy.ingress.podSelector }}
       podSelector:
       {{- toYaml .Values.networkPolicy.ingress.podSelector | nindent 12 }}
@@ -42,6 +46,8 @@ spec:
     ports:
       - port: http
         protocol: TCP
+{{- end }}
+{{- if .Values.networkPolicy.alertmanager }}
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -69,3 +75,4 @@ spec:
           {{- end }}
   {{- end }}
 {{- end }}
+
