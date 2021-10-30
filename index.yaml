@@ -3,6 +3,15 @@ entries:
   fourkeys:
   - apiVersion: v1
     appVersion: v1.0.0
+    created: "2021-10-30T14:41:36.524104791Z"
+    description: A Helm chart for the fourkeys project.
+    digest: a8d68c5634a329e7d5fb242260513572011b4e64795bb3bb9c84f6a335f3ae49
+    name: fourkeys
+    urls:
+    - https://github.com/italolelis/fourkeys/releases/download/fourkeys-1.0.2/fourkeys-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v1
+    appVersion: v1.0.0
     created: "2021-10-30T14:10:57.049964881Z"
     description: A Helm chart for the fourkeys project.
     digest: 181ca89414852a4f863cd5f04ac2a07daae6571417298e5596ba933117b517df
@@ -19,4 +28,4 @@ entries:
     urls:
     - https://github.com/italolelis/fourkeys/releases/download/fourkeys-1.0.0/fourkeys-1.0.0.tgz
     version: 1.0.0
-generated: "2021-10-30T14:10:57.049972981Z"
+generated: "2021-10-30T14:41:36.524116591Z"
