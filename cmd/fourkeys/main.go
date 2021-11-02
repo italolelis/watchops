@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
 	"github.com/heptiolabs/healthcheck"
 	"github.com/italolelis/fourkeys/internal/app/http/rest"
 	"github.com/italolelis/fourkeys/internal/app/provider/gh"
@@ -44,9 +43,8 @@ type config struct {
 		WebhookSecret string `split_words:"true"`
 	}
 	Kinesis struct {
-		Endpoint   string
-		Region     string `default:"eu-central-1"`
-		DisableSSL bool   `split_words:"true"`
+		Endpoint string
+		Region   string `default:"eu-central-1"`
 	}
 	TopicPrefix string `split_words:"true"`
 }
@@ -86,16 +84,10 @@ func run(ctx context.Context) error {
 	// =============================================
 	slog.Info("kinesis")
 
-	session, err := kinesis.NewSession(kinesis.SessionConfig{
-		Endpoint:   cfg.Kinesis.Endpoint,
-		Region:     cfg.Kinesis.Region,
-		DisableSSL: cfg.Kinesis.DisableSSL,
+	p, err := kinesis.NewPublisher(ctx, kinesis.SessionConfig{
+		Endpoint: cfg.Kinesis.Endpoint,
+		Region:   cfg.Kinesis.Region,
 	})
-	if err != nil {
-		return fmt.Errorf("failed to create a new aws session: %w", err)
-	}
-
-	p, err := kinesis.NewPublisher(session)
 	if err != nil {
 		return fmt.Errorf("failed to create a new publisher: %w", err)
 	}
@@ -176,6 +168,8 @@ func setupProbeServer(cfg config) *http.Server {
 
 // setupServer prepares the handlers and services to create the http rest server.
 func setupServer(ctx context.Context, p publisher.Publisher, cfg config) *http.Server {
+	logger := log.WithContext(ctx)
+
 	webhook := wh.NewPublisherConnector(ctx, p, cfg.TopicPrefix)
 	ghHandler := rest.NewWebhookHandler(webhook)
 
@@ -183,7 +177,7 @@ func setupServer(ctx context.Context, p publisher.Publisher, cfg config) *http.S
 	ogValidator := opsgenie.NewValidator(cfg.Opsgenie.WebhookSecret)
 
 	r := chi.NewRouter()
-	r.Use(middleware.Logger)
+	r.Use(log.NewStructuredLogger(logger))
 	r.Mount("/webhooks", ghHandler.Routes(ghValidator, ogValidator))
 
 	return &http.Server{
