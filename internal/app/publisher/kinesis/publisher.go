@@ -6,10 +6,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/client"
-	awskinesis "github.com/aws/aws-sdk-go/service/kinesis"
-	"github.com/aws/aws-sdk-go/service/kinesis/kinesisiface"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/kinesis"
 )
 
 var (
@@ -17,26 +16,48 @@ var (
 	ErrEmptySession    = errors.New("kinesis session can't be nil")
 )
 
+type SessionConfig struct {
+	Endpoint string
+	Region   string
+}
+
 // Publisher holds the kinesis connection and the stream name.
 type Publisher struct {
-	kinesis kinesisiface.KinesisAPI
+	kinesis *kinesis.Client
 }
 
 // NewPublisher creates a new kinesis connection.
-func NewPublisher(session client.ConfigProvider) (*Publisher, error) {
-	if session == nil {
-		return nil, ErrEmptySession
+func NewPublisher(ctx context.Context, cfg SessionConfig) (*Publisher, error) {
+	resolver := aws.EndpointResolverFunc(func(service, region string) (aws.Endpoint, error) {
+		if cfg.Endpoint != "" {
+			return aws.Endpoint{
+				PartitionID:   "aws",
+				URL:           cfg.Endpoint,
+				SigningRegion: cfg.Region,
+			}, nil
+		}
+
+		return aws.Endpoint{}, &aws.EndpointNotFoundError{}
+	})
+
+	awsCfg, err := config.LoadDefaultConfig(
+		ctx,
+		config.WithRegion(cfg.Region),
+		config.WithEndpointResolver(resolver),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to load aws config: %w", err)
 	}
 
 	return &Publisher{
-		kinesis: awskinesis.New(session),
+		kinesis: kinesis.NewFromConfig(awsCfg),
 	}, nil
 }
 
 // Publish publish the data to the correct stream.
 //nolint: exhaustivestruct
 func (p *Publisher) Publish(ctx context.Context, streamName string, data []byte) error {
-	_, err := p.kinesis.PutRecordWithContext(ctx, &awskinesis.PutRecordInput{
+	_, err := p.kinesis.PutRecord(ctx, &kinesis.PutRecordInput{
 		Data:         data,
 		StreamName:   &streamName,
 		PartitionKey: aws.String(time.Now().Format(time.RFC3339Nano)),
