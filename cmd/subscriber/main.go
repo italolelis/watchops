@@ -23,6 +23,14 @@ type config struct {
 		ConnMaxLifetime time.Duration `split_words:"true" default:"1h"`
 		Timeout         time.Duration `required:"true" default:"30s"`
 	}
+	MessageBroker struct {
+		Driver  string `required:"true"`
+		Kinesis struct {
+			Endpoint   string
+			Region     string `required:"true"`
+			StreamName string `split_words:"true" required:"true"`
+		}
+	} `split_words:"true"`
 }
 
 func main() {
@@ -58,11 +66,10 @@ func run(ctx context.Context) error {
 
 	defer db.Close()
 
-	events := stream.NewEventDataHandler(db, &gh.Parser{})
-	subs, err := subscriber.Build(ctx, "kinesis", map[string]string{
-		"region":   "eu-central-1",
-		"endpoint": "http://localhost:4566",
-	})
+	logger := log.WithContext(context.Background())
+	logger.Debugw("selecting subscriber driver", "driver", cfg.MessageBroker.Driver)
+	subs, err := subscriber.Build(ctx, "kinesis", subscriber.Config(cfg.MessageBroker))
 
+	events := stream.NewEventDataHandler(db, &gh.Parser{})
 	return subs.Subscribe(ctx, "fourkeys_github", events.Handle)
 }
