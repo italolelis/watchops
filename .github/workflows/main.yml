@@ -9,7 +9,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  LAMBDA_IMAGE_NAME: ${{ github.repository }}-lambda
+  SUBSCRIBER_IMAGE_NAME: ${{ github.repository }}-subscriber
 
 jobs:
   test:
@@ -55,11 +55,11 @@ jobs:
           type=semver,pattern={{major}}
           type=sha,event=branch
 
-    - name: Docker lambda meta
-      id: lambda_meta
+    - name: Docker subscriber meta
+      id: subscriber_meta
       uses: docker/metadata-action@v3
       with:
-        images: ${{ env.REGISTRY }}/${{ env.LAMBDA_IMAGE_NAME }}
+        images: ${{ env.REGISTRY }}/${{ env.SUBSCRIBER_IMAGE_NAME }}
         tags: |
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
@@ -101,10 +101,10 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: .
-        file: ./Dockerfile_lambda
+        file: ./Dockerfile_subscriber
         push: true
-        tags: ${{ steps.lambda_meta.outputs.tags }}
-        labels: ${{ steps.lambda_meta.outputs.labels }}
+        tags: ${{ steps.subscriber_meta.outputs.tags }}
+        labels: ${{ steps.subscriber_meta.outputs.labels }}
         cache-from: type=local,src=/tmp/.buildx-cache
         cache-to: type=local,dest=/tmp/.buildx-cache-new
 
