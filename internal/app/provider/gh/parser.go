@@ -166,11 +166,20 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 			PullRequest: convertPullRequest(e.GetPullRequest()),
 		}
 	case *github.Deployment:
+		event.TimeCreated = e.GetCreatedAt().Time
+		event.ID = strconv.Itoa(int(e.GetID()))
+		metadata = ghMetadata{
+			Deployment: convertDeployment(e),
+			Sender:     convertUser(e.GetCreator()),
+			Repository: &repo{
+				URL: e.GetRepositoryURL(),
+			},
+		}
 	case *github.DeploymentStatusEvent:
 		event.TimeCreated = e.GetDeploymentStatus().GetUpdatedAt().Time
 		event.ID = strconv.Itoa(int(e.GetDeploymentStatus().GetID()))
 		metadata = ghMetadata{
-			Deployment: convertDeployment(e),
+			Deployment: convertDeploymentStatus(e),
 			Sender:     convertUser(e.GetSender()),
 			Repository: convertRepo(e.GetRepo()),
 		}
@@ -221,7 +230,14 @@ func convertPullRequest(p *github.PullRequest) *pullRequest {
 	}
 }
 
-func convertDeployment(e *github.DeploymentStatusEvent) *deployment {
+func convertDeployment(e *github.Deployment) *deployment {
+	return &deployment{
+		ID:          e.GetID(),
+		Environment: e.GetEnvironment(),
+	}
+}
+
+func convertDeploymentStatus(e *github.DeploymentStatusEvent) *deployment {
 	return &deployment{
 		ID:          e.GetDeployment().GetID(),
 		Environment: e.GetDeployment().GetEnvironment(),
