@@ -1,11 +1,11 @@
-{{- if .Values.configMap }}
+{{- range $name, $cm := .Values.configMaps }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "fourkeys.fullname" . }}
+  name: {{ template "lykon-service.fullname" $ }}-{{ $name }}
   labels:
-{{ include "fourkeys.labels" . | indent 4 }}
+    {{ include "fourkeys.labels" $ | indent 4 }}
 data:
-{{ toYaml .Values.configMap | indent 2 }}
+  {{ toYaml $cm | nindent 2 }}
 {{- end }}

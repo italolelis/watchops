@@ -27,18 +27,22 @@ networkPolicy:
   #   port: null
 
 autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 3
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  app:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
 
 app:
+  enabled: true
   image:
     repository: "ghcr.io/italolelis/fourkeys"
     tag: latest
-  imagePullSecrets: []  
+  imagePullSecrets: []
   replicaCount: 1
+  configMap: app
+  secrets: app
   labels: {}
   annotations: {}
   nodeSelector: {}
@@ -73,6 +77,33 @@ app:
     #   cpu: 50m
     #   memory: 50Mi
 
+subscribers:
+  github:
+    enabled: true
+    image:
+      repository: "ghcr.io/italolelis/fourkeys"
+      tag: subscriber-latest
+    imagePullSecrets: []
+    replicaCount: 1
+    configMap: subscriber_github
+    labels: {}
+    annotations: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: []
+    podAnnotations: {}
+    podSecurityContext: {}
+    securityContext: {}
+    livenessProbe: {}
+    readinessProbe: {}
+    resources:
+      requests:
+        cpu: 20m
+        memory: 30Mi
+      # limits:
+      #   cpu: 50m
+      #   memory: 50Mi
+
 service:
   type: ClusterIP
   port: 80
@@ -101,17 +132,25 @@ migrations:
   # destination: redshift://${{ secrets.MIGRATIONS_DESTINATION_CRED }}@localhost:5432/fourkeys?sslmode=disable\
 
 configMap:
-  PORT: "8080"
-  LOG_LEVEL: "warn"
-  REST_READ_TIMEOUT: 30s
-  REST_WRITE_TIMEOUT: 30s
-  REST_IDLE_TIMEOUT: 30s
-  TOPIC_PREFIX: fourkeys_
-  DATABASE_DRIVER: "postgres" # you can choose between postgres or redshift
+  app:
+    PORT: "8080"
+    LOG_LEVEL: "info"
+    REST_READ_TIMEOUT: 30s
+    REST_WRITE_TIMEOUT: 30s
+    REST_IDLE_TIMEOUT: 30s
+    TOPIC_PREFIX: fourkeys_
+  subscriber_github:
+    LOG_LEVEL: "info"
+    DATABASE_DRIVER: "postgres" # you can choose between postgres or redshift
+    DATABASE_DSN: ""
+    MESSAGE_BROKER_DRIVER: "kinesis"
+    MESSAGE_BROKER_KINESIS_STREAM_NAME: "fourkeys_github"
+    MESSAGE_BROKER_KINESIS_REGION: "eu-central-1"
 
 secrets:
-  GITHUB_WEBHOOK_SECRET: ""
-  OPSGENIE_WEBHOOK_SECRET: ""
+  app:
+    GITHUB_WEBHOOK_SECRET: ""
+    OPSGENIE_WEBHOOK_SECRET: ""
 
 # Enable this if you're using https://github.com/coreos/prometheus-operator
 serviceMonitor:
