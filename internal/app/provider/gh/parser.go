@@ -165,6 +165,7 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 			Repository:  convertRepo(e.GetRepo()),
 			PullRequest: convertPullRequest(e.GetPullRequest()),
 		}
+	case *github.Deployment:
 	case *github.DeploymentStatusEvent:
 		event.TimeCreated = e.GetDeploymentStatus().GetUpdatedAt().Time
 		event.ID = strconv.Itoa(int(e.GetDeploymentStatus().GetID()))
