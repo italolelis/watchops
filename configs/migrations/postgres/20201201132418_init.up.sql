@@ -1,3 +1,5 @@
+CREATE SCHEMA fourkeys;
+
 CREATE TABLE fourkeys.events_raw (
     id VARCHAR NOT NULL,
     event_type VARCHAR NOT NULL,
