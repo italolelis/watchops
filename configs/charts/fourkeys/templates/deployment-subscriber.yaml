@@ -5,7 +5,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "fourkeys.fullname" $ }}
+  name: {{ template "fourkeys.fullname" $ }}-subscriber-{{ $name }}
 {{- with .annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
@@ -45,17 +45,11 @@ spec:
             {{- toYaml .securityContext | nindent 12 }}
           image: "{{ .image.repository }}:{{ .image.tag | default $.Chart.AppVersion }}"
           imagePullPolicy: {{ .image.pullPolicy }}
-          {{- if or (.configMap) (.secrets) }}
           envFrom:
-          {{- if .configMap }}
             - configMapRef:
-                name: {{ template "fourkeys.fullname" $ }}-{{ .configMap }}
-          {{- end }}
-          {{- if .secrets }}
+                name: {{ template "fourkeys.fullname" $ }}-subscriber-{{ $name }}
             - secretRef:
-                name: {{ template "fourkeys.fullname" $ }}-{{ .secrets }}
-          {{- end }}
-          {{- end }}
+                name: {{ template "fourkeys.fullname" $ }}-subscriber-{{ $name }}
           env:
             - name: KUBERNETES_NODE_IP
               valueFrom:

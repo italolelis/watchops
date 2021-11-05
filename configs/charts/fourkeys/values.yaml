@@ -41,8 +41,6 @@ app:
     tag: latest
   imagePullSecrets: []
   replicaCount: 1
-  configMap: app
-  secrets: app
   labels: {}
   annotations: {}
   nodeSelector: {}
@@ -76,6 +74,18 @@ app:
     # limits:
     #   cpu: 50m
     #   memory: 50Mi
+  config:
+    port: 8080
+    logLevel: "info"
+    githubSecret: ""
+    opsgenieSecret: ""
+    rest:
+      readTimeout: "30s"
+      writeTimeout: "30s"
+      idleTimeout: "30s"
+    messageBroker:
+      singleTopic: false
+      topicPrefix: "fourkeys_"
 
 subscribers:
   github:
@@ -85,7 +95,6 @@ subscribers:
       tag: subscriber-latest
     imagePullSecrets: []
     replicaCount: 1
-    configMap: subscriber_github
     labels: {}
     annotations: {}
     nodeSelector: {}
@@ -103,6 +112,29 @@ subscribers:
       # limits:
       #   cpu: 50m
       #   memory: 50Mi
+    config:
+      logLevel: "info"
+      database:
+        driver: "postgres" # you can choose between postgres or redshift
+        dsn: ""
+      messageBroker:
+        driver: "kinesis" # you can choose between kinesis or awslambda
+        streamName: "fourkeys_github"
+        region: "eu-central-1"
+        store:
+          driver: "memory" # you can choose between memory, postgres, mysql, or redis. I do not recommend using the memory store in production.
+          appName: "fourkeys-consumer-github"
+          postgres:
+            tableName: "kinesis_consumer"
+            dsn: ""
+          mysql:
+            tableName: "kinesis_consumer"
+            dsn: ""
+          redis:
+            address: ""
+            db: ""
+            username: ""
+            password: ""
 
 service:
   type: ClusterIP
@@ -142,15 +174,26 @@ configMap:
   subscriber_github:
     LOG_LEVEL: "info"
     DATABASE_DRIVER: "postgres" # you can choose between postgres or redshift
-    DATABASE_DSN: ""
     MESSAGE_BROKER_DRIVER: "kinesis"
     MESSAGE_BROKER_KINESIS_STREAM_NAME: "fourkeys_github"
     MESSAGE_BROKER_KINESIS_REGION: "eu-central-1"
+    MESSAGE_BROKER_KINESIS_STORE_DRIVER: "memory" # you can choose between memory, postgres, mysql, or redis. I do not recommend using the memory store in production. 
+    MESSAGE_BROKER_KINESIS_STORE_APP_NAME: "fourkeys-consumer-github"
+    # MESSAGE_BROKER_KINESIS_STORE_POSTGRES_TABLE_NAME: "kinesis_consumer"
+    # MESSAGE_BROKER_KINESIS_STORE_MYSQL_TABLE_NAME: "kinesis_consumer"
+    # MESSAGE_BROKER_KINESIS_STORE_REDIS_ADDRESS: ""
+    # MESSAGE_BROKER_KINESIS_STORE_REDIS_DB: ""
 
 secrets:
   app:
     GITHUB_WEBHOOK_SECRET: ""
     OPSGENIE_WEBHOOK_SECRET: ""
+  subscriber_github:
+    DATABASE_DSN: ""
+    # MESSAGE_BROKER_KINESIS_STORE_POSTGRES_DSN: ""
+    # MESSAGE_BROKER_KINESIS_STORE_MYSQL_DSN: ""
+    # MESSAGE_BROKER_KINESIS_STORE_REDIS_USERNAME: ""
+    # MESSAGE_BROKER_KINESIS_STORE_REDIS_PASSWORD: ""
 
 # Enable this if you're using https://github.com/coreos/prometheus-operator
 serviceMonitor:

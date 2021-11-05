@@ -1,11 +1,50 @@
-{{- range $name, $cm := .Values.configMaps }}
+{{- with .Values.app }}
+{{- if .enabled }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "lykon-service.fullname" $ }}-{{ $name }}
+  name: {{ template "fourkeys.fullname" $ }}-app
   labels:
-    {{ include "fourkeys.labels" $ | indent 4 }}
+{{ include "fourkeys.labels" $ | indent 4 }}
 data:
-  {{ toYaml $cm | nindent 2 }}
+  PORT: {{ .config.port | quote }}
+  LOG_LEVEL: {{ .config.logLevel | quote }}
+  REST_READ_TIMEOUT: {{ .config.rest.readTimeout | quote }}
+  REST_WRITE_TIMEOUT: {{ .config.rest.writeTimeout | quote }}
+  REST_IDLE_TIMEOUT: {{ .config.rest.idleTimeout | quote }}
+  TOPIC_PREFIX: {{ .config.messageBroker.topicPrefix | quote }}
+{{- end }}
+{{- end }}
+
+{{- range $name, $subscriber := .Values.subscribers }}
+{{- with $subscriber }}
+{{- if .enabled }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fourkeys.fullname" $ }}-subscriber-{{ $name }}
+  labels:
+{{ include "fourkeys.labels" $ | indent 4 }}
+data:
+  LOG_LEVEL: {{ .config.logLevel | quote }}
+  DATABASE_DRIVER: {{ .config.database.driver | quote }}
+  MESSAGE_BROKER_DRIVER: {{ .config.messageBroker.driver | quote }}
+  MESSAGE_BROKER_KINESIS_STREAM_NAME: {{ .config.messageBroker.streamName | quote }}
+  MESSAGE_BROKER_KINESIS_REGION: {{ .config.messageBroker.region | quote }}
+  MESSAGE_BROKER_KINESIS_STORE_DRIVER: {{ .config.messageBroker.store.driver | quote }}
+  MESSAGE_BROKER_KINESIS_STORE_APP_NAME: {{ .config.messageBroker.store.appName | quote }}
+  {{- if eq .config.messageBroker.driver "postgres" }}
+  MESSAGE_BROKER_KINESIS_STORE_POSTGRES_TABLE_NAME: {{ .config.messageBroker.store.postgres.tableName | quote }}
+  {{- end }}
+  {{- if eq .config.messageBroker.driver "mysql" }}
+  MESSAGE_BROKER_KINESIS_STORE_MYSQL_TABLE_NAME: {{ .config.messageBroker.store.mysql.tableName | quote }}
+  {{- end }}
+  {{- if eq .config.messageBroker.driver "redis" }}
+  MESSAGE_BROKER_KINESIS_STORE_REDIS_ADDRESS: {{ .config.messageBroker.store.redis.address | quote }}
+  MESSAGE_BROKER_KINESIS_STORE_REDIS_DB: {{ .config.messageBroker.store.redis.db | quote }}
+  {{- end }}
+{{- end }}
+{{- end }}
 {{- end }}
