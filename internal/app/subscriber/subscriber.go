@@ -11,7 +11,7 @@ import (
 type (
 	// Subscriber is the interface that must be implemented by the subscriber.
 	Subscriber interface {
-		Subscribe(ctx context.Context, streamName string, fn func(ctx context.Context, payload []byte, headers map[string][]string) error) error
+		Subscribe(ctx context.Context, fn func(ctx context.Context, payload []byte, headers map[string][]string) error) error
 	}
 
 	// Config is the configuration for the subscriber.

@@ -69,5 +69,5 @@ func run(ctx context.Context) error {
 	subs, err := subscriber.Build(ctx, "kinesis", subscriber.Config(cfg.MessageBroker))
 
 	events := stream.NewEventDataHandler(db, &gh.Parser{})
-	return subs.Subscribe(ctx, "fourkeys_github", events.Handle)
+	return subs.Subscribe(ctx, events.Handle)
 }

@@ -23,7 +23,7 @@ func NewSubscriber(ctx context.Context) (*Subscriber, error) {
 
 // Subscribe subscribes to the kinesis stream for a lambda. This method will block the caller.
 //nolint: exhaustivestruct
-func (s *Subscriber) Subscribe(ctx context.Context, streamName string, fn func(ctx context.Context, payload []byte, headers map[string][]string) error) error {
+func (s *Subscriber) Subscribe(ctx context.Context, fn func(ctx context.Context, payload []byte, headers map[string][]string) error) error {
 	lambda.StartWithContext(ctx, s.lambdaHandler(fn))
 
 	return nil
