@@ -67,6 +67,9 @@ func run(ctx context.Context) error {
 
 	logger.Debugw("creating subscriber", "driver", cfg.MessageBroker.Driver)
 	subs, err := subscriber.Build(ctx, "kinesis", subscriber.Config(cfg.MessageBroker))
+	if err != nil {
+		return fmt.Errorf("failed to build subscriber: %w", err)
+	}
 
 	events := stream.NewEventDataHandler(db, &gh.Parser{})
 	return subs.Subscribe(ctx, events.Handle)
