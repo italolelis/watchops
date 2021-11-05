@@ -48,4 +48,13 @@ require (
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
 
-require github.com/awslabs/kinesis-aggregation/go v0.0.0-20210630091500-54e17340d32f // indirect
+require (
+	github.com/awslabs/kinesis-aggregation/go v0.0.0-20210630091500-54e17340d32f // indirect
+	github.com/cespare/xxhash v1.1.0 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200624174652-8d2f3be8b2d9 // indirect
+	github.com/go-redis/redis/v8 v8.0.0-beta.6 // indirect
+	github.com/go-sql-driver/mysql v1.5.0 // indirect
+	go.opentelemetry.io/otel v0.7.0 // indirect
+	golang.org/x/exp v0.0.0-20200513190911-00229845015e // indirect
+	google.golang.org/grpc v1.30.0 // indirect
+)
