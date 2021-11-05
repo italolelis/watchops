@@ -31,7 +31,7 @@ func (s *Subscriber) Subscribe(ctx context.Context, streamName string, fn func(c
 
 func (s *Subscriber) lambdaHandler(fn handlerFunc) func(context.Context, events.KinesisEvent) error {
 	return func(ctx context.Context, kinesisEvent events.KinesisEvent) error {
-		logger := log.WithContext(ctx).Named("lambda")
+		logger := log.WithContext(ctx).Named("lambda_subscriber")
 		logger.Info("processing messages...")
 
 		for _, record := range kinesisEvent.Records {

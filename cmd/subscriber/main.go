@@ -9,6 +9,7 @@ import (
 	"github.com/italolelis/fourkeys/internal/app/storage"
 	"github.com/italolelis/fourkeys/internal/app/stream"
 	"github.com/italolelis/fourkeys/internal/app/subscriber"
+	"github.com/italolelis/fourkeys/internal/app/subscriber/kinesis"
 	"github.com/italolelis/fourkeys/internal/pkg/log"
 	"github.com/kelseyhightower/envconfig"
 )
@@ -25,11 +26,7 @@ type config struct {
 	}
 	MessageBroker struct {
 		Driver  string `required:"true"`
-		Kinesis struct {
-			Endpoint   string
-			Region     string `required:"true"`
-			StreamName string `split_words:"true" required:"true"`
-		}
+		Kinesis kinesis.SessionConfig
 	} `split_words:"true"`
 }
 
@@ -46,6 +43,7 @@ func main() {
 }
 
 func run(ctx context.Context) error {
+	logger := log.WithContext(ctx)
 	// =============================================
 	// Load Configuration
 	// =============================================
@@ -59,6 +57,7 @@ func run(ctx context.Context) error {
 	// =========================================================================
 	// Setup Databases
 	// =========================================================================
+	logger.Debugw("connecting to event store", "driver", cfg.Database.Driver)
 	db, err := storage.Connect(ctx, storage.Config(cfg.Database))
 	if err != nil {
 		return fmt.Errorf("failed to connect to database: %w", err)
@@ -66,8 +65,7 @@ func run(ctx context.Context) error {
 
 	defer db.Close()
 
-	logger := log.WithContext(context.Background())
-	logger.Debugw("selecting subscriber driver", "driver", cfg.MessageBroker.Driver)
+	logger.Debugw("creating subscriber", "driver", cfg.MessageBroker.Driver)
 	subs, err := subscriber.Build(ctx, "kinesis", subscriber.Config(cfg.MessageBroker))
 
 	events := stream.NewEventDataHandler(db, &gh.Parser{})

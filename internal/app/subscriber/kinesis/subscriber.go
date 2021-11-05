@@ -20,17 +20,21 @@ var (
 
 type SessionConfig struct {
 	Endpoint   string
-	Region     string
-	StreamName string
+	Region     string `required:"true"`
+	StreamName string `split_words:"true" required:"true"`
+	Store      StoreConfig
 }
 
 // Subscriber is the kinesis subscriber.
 type Subscriber struct {
 	client *kinesis.Client
+	store  consumer.Store
 }
 
 // NewSubscriber creates a new instance of Subscriber.
 func NewSubscriber(ctx context.Context, cfg SessionConfig) (*Subscriber, error) {
+	logger := log.WithContext(ctx).Named("kinesis_subscriber")
+
 	resolver := aws.EndpointResolverFunc(func(service, region string) (aws.Endpoint, error) {
 		if cfg.Endpoint != "" {
 			return aws.Endpoint{
@@ -52,22 +56,30 @@ func NewSubscriber(ctx context.Context, cfg SessionConfig) (*Subscriber, error) 
 		return nil, fmt.Errorf("failed to load aws config: %w", err)
 	}
 
+	logger.Debugw("building subscriber store", "store", cfg.Store.Driver)
+	store, err := BuildStore(cfg.Store)
+	if err != nil {
+		return nil, fmt.Errorf("failed to build a subscriber store: %w", err)
+	}
+
 	return &Subscriber{
 		client: kinesis.NewFromConfig(awsCfg),
+		store:  store,
 	}, nil
 }
 
 // Subscribe subscribes to the kinesis stream.
 //nolint: exhaustivestruct
 func (s *Subscriber) Subscribe(ctx context.Context, streamName string, fn func(ctx context.Context, payload []byte, headers map[string][]string) error) error {
-	logger := log.WithContext(ctx).Named("kinesis_consumer")
+	logger := log.WithContext(ctx).Named("kinesis_subscriber")
 
 	c, err := consumer.New(
 		streamName,
 		consumer.WithClient(s.client),
+		consumer.WithStore(s.store),
 	)
 	if err != nil {
-		return fmt.Errorf("failed to create consumer: %w", err)
+		return fmt.Errorf("failed to create subscriber: %w", err)
 	}
 
 	logger.Info("processing messages...")
