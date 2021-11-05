@@ -165,15 +165,13 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 			Repository:  convertRepo(e.GetRepo()),
 			PullRequest: convertPullRequest(e.GetPullRequest()),
 		}
-	case *github.Deployment:
-		event.TimeCreated = e.GetCreatedAt().Time
-		event.ID = strconv.Itoa(int(e.GetID()))
+	case *github.DeploymentEvent:
+		event.TimeCreated = e.GetDeployment().GetUpdatedAt().Time
+		event.ID = strconv.Itoa(int(e.GetDeployment().GetID()))
 		metadata = ghMetadata{
-			Deployment: convertDeployment(e),
-			Sender:     convertUser(e.GetCreator()),
-			Repository: &repo{
-				URL: e.GetRepositoryURL(),
-			},
+			Deployment: convertDeployment(e.GetDeployment()),
+			Sender:     convertUser(e.GetSender()),
+			Repository: convertRepo(e.GetRepo()),
 		}
 	case *github.DeploymentStatusEvent:
 		event.TimeCreated = e.GetDeploymentStatus().GetUpdatedAt().Time
