@@ -35,13 +35,13 @@ data:
   MESSAGE_BROKER_KINESIS_REGION: {{ .config.messageBroker.region | quote }}
   MESSAGE_BROKER_KINESIS_STORE_DRIVER: {{ .config.messageBroker.store.driver | quote }}
   MESSAGE_BROKER_KINESIS_STORE_APP_NAME: {{ .config.messageBroker.store.appName | quote }}
-  {{- if eq .config.messageBroker.driver "postgres" }}
+  {{- if eq .config.messageBroker.store.driver "postgres" }}
   MESSAGE_BROKER_KINESIS_STORE_POSTGRES_TABLE_NAME: {{ .config.messageBroker.store.postgres.tableName | quote }}
   {{- end }}
-  {{- if eq .config.messageBroker.driver "mysql" }}
+  {{- if eq .config.messageBroker.store.driver "mysql" }}
   MESSAGE_BROKER_KINESIS_STORE_MYSQL_TABLE_NAME: {{ .config.messageBroker.store.mysql.tableName | quote }}
   {{- end }}
-  {{- if eq .config.messageBroker.driver "redis" }}
+  {{- if eq .config.messageBroker.store.driver "redis" }}
   MESSAGE_BROKER_KINESIS_STORE_REDIS_ADDRESS: {{ .config.messageBroker.store.redis.address | quote }}
   MESSAGE_BROKER_KINESIS_STORE_REDIS_DB: {{ .config.messageBroker.store.redis.db | quote }}
   {{- end }}
