@@ -15,7 +15,7 @@ require (
 )
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.10.0
+	github.com/aws/aws-sdk-go-v2 v1.11.0
 	github.com/aws/aws-sdk-go-v2/config v1.9.0
 	github.com/aws/aws-sdk-go-v2/credentials v1.5.0 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.7.0 // indirect
@@ -24,10 +24,11 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/kinesis v1.7.0
 	github.com/aws/aws-sdk-go-v2/service/sso v1.5.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.8.0 // indirect
-	github.com/aws/smithy-go v1.8.1 // indirect
+	github.com/aws/smithy-go v1.9.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/go-redis/redis/v8 v8.0.0-beta.6
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/harlow/kinesis-consumer v0.3.6-0.20210922050014-61fa84eca6ce
@@ -52,7 +53,6 @@ require (
 	github.com/awslabs/kinesis-aggregation/go v0.0.0-20210630091500-54e17340d32f // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200624174652-8d2f3be8b2d9 // indirect
-	github.com/go-redis/redis/v8 v8.0.0-beta.6 // indirect
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	go.opentelemetry.io/otel v0.7.0 // indirect
 	golang.org/x/exp v0.0.0-20200513190911-00229845015e // indirect
