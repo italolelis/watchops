@@ -42,4 +42,12 @@ jobs:
           ${{ runner.os }}-go-
 
     - name: Test
-      run: go test -v -cover ./...
+      run: go test -race -covermode=atomic -coverprofile=coverage.out ./...
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2
+      with:
+        files: ./coverage.out
+        fail_ci_if_error: true
+        name: codecov-fourkeys
+        verbose: true
