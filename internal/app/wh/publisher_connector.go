@@ -69,6 +69,10 @@ func getSource(headers map[string][]string) string {
 		return "github"
 	case "Opsgenie Http Client":
 		return "opsgenie"
+	case "X-Gitlab-Event":
+		return "gitlab"
+	case "Circleci-Event-Type":
+		return "circleci"
 	default:
 		return ""
 	}
