@@ -20,6 +20,7 @@ pdb:
   minAvailable: 1
 
 networkPolicy:
+  # -- Whether to enable network policies. If your cluster supports it, I recommend enabling it.
   enabled: false
   # ingress:
   #   namespaceSelector: {}
@@ -28,11 +29,16 @@ networkPolicy:
 
 autoscaling:
   app:
+    # -- Enable autoscaling for the Four Keys main API.
     enabled: false
+    # -- Number of minimum replicas to scale down.
     minReplicas: 1
+    # -- Number of maximum replicas to scale up.
     maxReplicas: 3
+    # -- Target CPU utilization percentage.
     targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
+    # -- Target memory utilization percentage.
+    targetMemoryUtilizationPercentage: 50
 
 app:
   enabled: true
@@ -75,16 +81,25 @@ app:
     #   cpu: 50m
     #   memory: 50Mi
   config:
+    # -- Configure the port number of the main API.
     port: 8080
+    # -- Define the log level. Accepted values are: debug, info, warn, error.
     logLevel: "info"
+    # -- Sets the github secret that will be use to validate incoming webhooks from GitHub.
     githubSecret: ""
+    # -- Sets the OpsGenie secret that will be used to validate incoming webhooks from OpsGenie.
     opsgenieSecret: ""
     rest:
+      # -- Defines the read server timeout.
       readTimeout: "30s"
+      # -- Defines the write server timeout.
       writeTimeout: "30s"
+      # -- Defines the idle server timeout.
       idleTimeout: "30s"
     messageBroker:
+      # -- Whether to use a single topic for all incomming webhooks or not.
       singleTopic: false
+      # -- If you defined multiple topics (one for each incoming webhook type), then you can define the prefix of these topics.
       topicPrefix: "fourkeys_"
 
 subscribers:
@@ -113,27 +128,43 @@ subscribers:
       #   cpu: 50m
       #   memory: 50Mi
     config:
+      # -- Define the log level. Accepted values are: debug, info, warn, error.
       logLevel: "info"
       database:
-        driver: "postgres" # you can choose between postgres or redshift
+        # -- The main database driver (the event store). You can choose between postgres or redshift.
+        driver: "postgres"
+        # -- The DSN for the database. If you are using the postgres chart, you don't need to define this value.
         dsn: ""
       messageBroker:
-        driver: "kinesis" # you can choose between kinesis or awslambda
+        # -- Defines which message broker to use. You can choose between kinesis or awslambda (which is also based on kinesis).
+        driver: "kinesis"
+        # -- Sets the name of the stream this subscriber will listen to. If you are using a single stream for all webhook types, then just define the name of that stream.
         streamName: "fourkeys_github"
+        # -- When using AWS Kinesis, you need to set the AWS region.
         region: "eu-central-1"
         store:
-          driver: "memory" # you can choose between memory, postgres, mysql, or redis. I do not recommend using the memory store in production.
+          # -- The message broker storage that holds the last read record from the broker. You can choose between memory, postgres, mysql, or redis. I do not recommend using the memory store in production.
+          driver: "memory"
+          # -- The app name that is used as a namespace in the storage.
           appName: "fourkeys-consumer-github"
           postgres:
+            # -- The postgres table name.
             tableName: "kinesis_consumer"
+            # -- The postgres database DSN. If you are using the postgres chart, you don't need to define this value.
             dsn: ""
           mysql:
+            # -- The mysql table name.
             tableName: "kinesis_consumer"
+            # -- The mysql database DSN. If you are using the mysql chart, you don't need to define this value.
             dsn: ""
           redis:
+            # -- The redis address. If you are using the redis chart, you don't need to define this value.
             address: ""
+            # -- The redis database. If you are using the redis chart, you don't need to define this value.
             db: ""
+            # -- The redis username. If you are using the redis chart, you don't need to define this value.
             username: ""
+            # -- The redis password. If you are using the redis chart, you don't need to define this value.
             password: ""
 
 service:
@@ -142,10 +173,13 @@ service:
   probePort: 9090
 
 ingress:
+  # -- Enables Ingress
   enabled: false
+  # -- Ingress annotations (values are templated)
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
+  # -- Ingress accepted hostnames
   hosts:
     - host: chart-example.local
       paths:
@@ -153,50 +187,21 @@ ingress:
       backend:
         serviceName: chart-example.local
         servicePort: 80
+  # -- Ingress TLS configuration
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
 
 migrations:
+  # -- Enable migrations to your datasource.
   enabled: false
   # source: github://${{ secrets.MIGRATIONS_SOURCE_CRED }}@italolelis/fourkeys/configs/migrations/postgres
   # destination: redshift://${{ secrets.MIGRATIONS_DESTINATION_CRED }}@localhost:5432/fourkeys?sslmode=disable\
 
-configMap:
-  app:
-    PORT: "8080"
-    LOG_LEVEL: "info"
-    REST_READ_TIMEOUT: 30s
-    REST_WRITE_TIMEOUT: 30s
-    REST_IDLE_TIMEOUT: 30s
-    TOPIC_PREFIX: fourkeys_
-  subscriber_github:
-    LOG_LEVEL: "info"
-    DATABASE_DRIVER: "postgres" # you can choose between postgres or redshift
-    MESSAGE_BROKER_DRIVER: "kinesis"
-    MESSAGE_BROKER_KINESIS_STREAM_NAME: "fourkeys_github"
-    MESSAGE_BROKER_KINESIS_REGION: "eu-central-1"
-    MESSAGE_BROKER_KINESIS_STORE_DRIVER: "memory" # you can choose between memory, postgres, mysql, or redis. I do not recommend using the memory store in production. 
-    MESSAGE_BROKER_KINESIS_STORE_APP_NAME: "fourkeys-consumer-github"
-    # MESSAGE_BROKER_KINESIS_STORE_POSTGRES_TABLE_NAME: "kinesis_consumer"
-    # MESSAGE_BROKER_KINESIS_STORE_MYSQL_TABLE_NAME: "kinesis_consumer"
-    # MESSAGE_BROKER_KINESIS_STORE_REDIS_ADDRESS: ""
-    # MESSAGE_BROKER_KINESIS_STORE_REDIS_DB: ""
-
-secrets:
-  app:
-    GITHUB_WEBHOOK_SECRET: ""
-    OPSGENIE_WEBHOOK_SECRET: ""
-  subscriber_github:
-    DATABASE_DSN: ""
-    # MESSAGE_BROKER_KINESIS_STORE_POSTGRES_DSN: ""
-    # MESSAGE_BROKER_KINESIS_STORE_MYSQL_DSN: ""
-    # MESSAGE_BROKER_KINESIS_STORE_REDIS_USERNAME: ""
-    # MESSAGE_BROKER_KINESIS_STORE_REDIS_PASSWORD: ""
-
 # Enable this if you're using https://github.com/coreos/prometheus-operator
 serviceMonitor:
+  # -- Whether to enable prometheus service monitor. Enable this if you're using https://github.com/coreos/prometheus-operator.
   enabled: false
 
 # Rules for the Prometheus Operator

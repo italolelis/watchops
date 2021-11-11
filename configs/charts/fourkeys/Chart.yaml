@@ -1,5 +1,11 @@
-apiVersion: v1
+apiVersion: v2
 appVersion: "v1.0.0"
-description: A Helm chart for the fourkeys project.
+description: "This repository implements the four key metrics coined by Google and introduced in Accelerate: Time to Restore, Lead Time to Change, Deployment Frequency, and Change Failure Rate."
 name: fourkeys
 version: 1.2.2
+sources:
+  - https://github.com/italolelis/fourkeys
+maintainers:
+  - name: italolelis
+    email: me@italovietro.com
+type: application
