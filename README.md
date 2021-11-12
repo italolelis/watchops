@@ -25,9 +25,9 @@ You can use WatchOps on any platform. It's even easier to get started if you hav
 Once Helm is set up properly, add the repo as follows:
 
 ```console
-$ helm repo add italolelis https://italolelis.github.io/watchops
+$ helm repo add watchops https://italolelis.github.io/watchops
 $ helm repo update
-$ helm install my-release italolelis/watchops
+$ helm install my-release watchops/watchops
 ```
 
 ## About the project
