@@ -1,5 +1,5 @@
-{{- if .Values.app.enabled }}
-{{- with .Values.app }}
+{{- if .Values.publisher.enabled }}
+{{- with .Values.publisher }}
 ---
 apiVersion: apps/v1
 kind: Deployment

@@ -6,8 +6,8 @@ metadata:
   name: {{ template "watchops.fullname" . }}-db-migrate
   labels:
 {{ include "watchops.labels" . | indent 4 }}
-{{- if .Values.app.labels }}
-{{ toYaml .Values.app.labels | indent 4 }}
+{{- if .Values.migrations.labels }}
+{{ toYaml .Values.migrations.labels | indent 4 }}
 {{- end }}
   annotations:
     "helm.sh/hook": "pre-install,pre-upgrade"
@@ -23,8 +23,8 @@ spec:
 {{- end }}
       labels:
 {{ include "watchops.labels" . | indent 8 }}
-{{- if .Values.app.labels }}
-{{ toYaml .Values.app.labels | indent 8 }}
+{{- if .Values.migrations.labels }}
+{{ toYaml .Values.migrations.labels | indent 8 }}
 {{- end }}
     spec:
       restartPolicy: Never

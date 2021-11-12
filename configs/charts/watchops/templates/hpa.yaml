@@ -1,4 +1,4 @@
-{{- range $name, $hpa := .Values.secrets }}
+{{- range $name, $hpa := .Values.autoscaling }}
 {{- if $hpa.enabled }}
 ---
 apiVersion: autoscaling/v2beta2

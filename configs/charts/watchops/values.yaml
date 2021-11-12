@@ -28,7 +28,7 @@ networkPolicy:
   #   port: null
 
 autoscaling:
-  app:
+  publisher:
     # -- Enable autoscaling for the Four Keys main API.
     enabled: false
     # -- Number of minimum replicas to scale down.
@@ -40,10 +40,10 @@ autoscaling:
     # -- Target memory utilization percentage.
     targetMemoryUtilizationPercentage: 50
 
-app:
+publisher:
   enabled: true
   image:
-    repository: "ghcr.io/italolelis/watchops"
+    repository: "ghcr.io/italolelis/watchops-publisher"
     tag: latest
   imagePullSecrets: []
   replicaCount: 1
@@ -106,8 +106,8 @@ subscribers:
   github:
     enabled: true
     image:
-      repository: "ghcr.io/italolelis/watchops"
-      tag: subscriber-latest
+      repository: "ghcr.io/italolelis/watchops-subscriber"
+      tag: latest
     imagePullSecrets: []
     replicaCount: 1
     labels: {}
@@ -196,6 +196,7 @@ ingress:
 migrations:
   # -- Enable migrations to your datasource.
   enabled: false
+  labels: {}
   # source: github://${{ secrets.MIGRATIONS_SOURCE_CRED }}@italolelis/watchops/configs/migrations/postgres
   # destination: redshift://${{ secrets.MIGRATIONS_DESTINATION_CRED }}@localhost:5432/watchops?sslmode=disable\
 
