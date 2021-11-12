@@ -1,12 +1,12 @@
 # WatchOps
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/italolelis/fourkeys/Main)
-![Codecov](https://img.shields.io/codecov/c/github/italolelis/fourkeys)
-![GitHub all releases](https://img.shields.io/github/downloads/italolelis/fourkeys/total)
-![GitHub](https://img.shields.io/github/license/italolelis/fourkeys)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/italolelis/watchops/Main)
+![Codecov](https://img.shields.io/codecov/c/github/italolelis/watchops)
+![GitHub all releases](https://img.shields.io/github/downloads/italolelis/watchops/total)
+![GitHub](https://img.shields.io/github/license/italolelis/watchops)
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/italolelis)
-![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/italolelis/fourkeys)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/italolelis/fourkeys)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/italolelis/watchops)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/italolelis/watchops)
 
 ![](images/cover.png)
 
