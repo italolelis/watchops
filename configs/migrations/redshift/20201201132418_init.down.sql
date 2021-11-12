@@ -1,1 +1,1 @@
-DROP TABLE fourkeys.events_raw;
+DROP TABLE watchops.events_raw;

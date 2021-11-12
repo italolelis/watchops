@@ -40,7 +40,7 @@ jobs:
       with:
         files: ./coverage.out
         fail_ci_if_error: true
-        name: codecov-fourkeys
+        name: codecov-watchops
         verbose: true
 
   build:
@@ -88,7 +88,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: /tmp/.buildx-cache
-        key: ${{ runner.os }}-single-buildx-fourkeys
+        key: ${{ runner.os }}-single-buildx-watchops
         restore-keys: |
           ${{ runner.os }}-single-buildx
 

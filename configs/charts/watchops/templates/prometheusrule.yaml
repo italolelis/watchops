@@ -3,7 +3,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ include "fourkeys.fullname" $ }}
+  name: {{ include "watchops.fullname" $ }}
   {{- with .namespace }}
   namespace: {{ . }}
   {{- end }}
@@ -12,7 +12,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "fourkeys.labels" $ | nindent 4 }}
+    {{- include "watchops.labels" $ | nindent 4 }}
   {{- with .labels }}
   {{- toYaml . | nindent 4 }}
   {{- end }}

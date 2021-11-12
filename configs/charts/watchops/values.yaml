@@ -43,7 +43,7 @@ autoscaling:
 app:
   enabled: true
   image:
-    repository: "ghcr.io/italolelis/fourkeys"
+    repository: "ghcr.io/italolelis/watchops"
     tag: latest
   imagePullSecrets: []
   replicaCount: 1
@@ -100,13 +100,13 @@ app:
       # -- Whether to use a single topic for all incomming webhooks or not.
       singleTopic: false
       # -- If you defined multiple topics (one for each incoming webhook type), then you can define the prefix of these topics.
-      topicPrefix: "fourkeys_"
+      topicPrefix: "watchops_"
 
 subscribers:
   github:
     enabled: true
     image:
-      repository: "ghcr.io/italolelis/fourkeys"
+      repository: "ghcr.io/italolelis/watchops"
       tag: subscriber-latest
     imagePullSecrets: []
     replicaCount: 1
@@ -139,14 +139,14 @@ subscribers:
         # -- Defines which message broker to use. You can choose between kinesis or awslambda (which is also based on kinesis).
         driver: "kinesis"
         # -- Sets the name of the stream this subscriber will listen to. If you are using a single stream for all webhook types, then just define the name of that stream.
-        streamName: "fourkeys_github"
+        streamName: "watchops_github"
         # -- When using AWS Kinesis, you need to set the AWS region.
         region: "eu-central-1"
         store:
           # -- The message broker storage that holds the last read record from the broker. You can choose between memory, postgres, mysql, or redis. I do not recommend using the memory store in production.
           driver: "memory"
           # -- The app name that is used as a namespace in the storage.
-          appName: "fourkeys-consumer-github"
+          appName: "watchops-consumer-github"
           postgres:
             # -- The postgres table name.
             tableName: "kinesis_consumer"
@@ -196,8 +196,8 @@ ingress:
 migrations:
   # -- Enable migrations to your datasource.
   enabled: false
-  # source: github://${{ secrets.MIGRATIONS_SOURCE_CRED }}@italolelis/fourkeys/configs/migrations/postgres
-  # destination: redshift://${{ secrets.MIGRATIONS_DESTINATION_CRED }}@localhost:5432/fourkeys?sslmode=disable\
+  # source: github://${{ secrets.MIGRATIONS_SOURCE_CRED }}@italolelis/watchops/configs/migrations/postgres
+  # destination: redshift://${{ secrets.MIGRATIONS_DESTINATION_CRED }}@localhost:5432/watchops?sslmode=disable\
 
 # Enable this if you're using https://github.com/coreos/prometheus-operator
 serviceMonitor:
@@ -216,7 +216,7 @@ prometheusRule:
   labels: {}
   # -- Contents of Prometheus rules file
   groups: []
-  # - name: fourkeys-rules
+  # - name: watchops-rules
   #   rules:
   #     - record: job:loki_request_duration_seconds_bucket:sum_rate
   #       expr: sum(rate(loki_request_duration_seconds_bucket[1m])) by (le, job)

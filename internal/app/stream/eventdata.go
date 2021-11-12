@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/italolelis/fourkeys/internal/app/provider"
+	"github.com/italolelis/watchops/internal/app/provider"
 )
 
 type (

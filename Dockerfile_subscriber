@@ -5,12 +5,12 @@ WORKDIR /app
 COPY ./ ./
 
 RUN apk add --update --no-cache git
-RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-s -w" -ldflags "-X main.version=${VERSION}" -o "dist/fourkeys_subscriber" github.com/italolelis/fourkeys/cmd/subscriber
+RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-s -w" -ldflags "-X main.version=${VERSION}" -o "dist/subscriber" github.com/italolelis/watchops/cmd/subscriber
 
 # ---
 
 FROM gcr.io/distroless/static:9ae716fb53c0728e15ff216e354744734bcf77d4
 
-COPY --from=builder /app/dist/fourkeys_subscriber /
+COPY --from=builder /app/dist/subscriber /
 
-ENTRYPOINT ["/fourkeys_subscriber"]
+ENTRYPOINT ["/subscriber"]

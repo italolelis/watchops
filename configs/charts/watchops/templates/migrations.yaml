@@ -3,9 +3,9 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ template "fourkeys.fullname" . }}-db-migrate
+  name: {{ template "watchops.fullname" . }}-db-migrate
   labels:
-{{ include "fourkeys.labels" . | indent 4 }}
+{{ include "watchops.labels" . | indent 4 }}
 {{- if .Values.app.labels }}
 {{ toYaml .Values.app.labels | indent 4 }}
 {{- end }}
@@ -16,20 +16,20 @@ spec:
   activeDeadlineSeconds: 60
   template:
     metadata:
-      name: {{ template "fourkeys.fullname" . }}-db-migrate
+      name: {{ template "watchops.fullname" . }}-db-migrate
 {{- with $.Values.jobAnnotations }}
       annotations:
 {{- toYaml . | nindent 8 }}
 {{- end }}
       labels:
-{{ include "fourkeys.labels" . | indent 8 }}
+{{ include "watchops.labels" . | indent 8 }}
 {{- if .Values.app.labels }}
 {{ toYaml .Values.app.labels | indent 8 }}
 {{- end }}
     spec:
       restartPolicy: Never
       containers:
-        - name: {{ template "fourkeys.fullname" . }}-db-migrate
+        - name: {{ template "watchops.fullname" . }}-db-migrate
           image: migrate/migrate:latest
           command: ['/migrate']
           args: ['-source', '{{ .Values.migrations.source }}', '-database', '{{ .Values.migrations.destination }}', '-verbose', 'up']

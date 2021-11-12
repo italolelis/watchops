@@ -3,13 +3,13 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ template "fourkeys.fullname" . }}
+  name: {{ template "watchops.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-{{ include "fourkeys.labels" $ | indent 4 }}
+{{ include "watchops.labels" $ | indent 4 }}
 rules:
 - apiGroups:      ['policy']
   resources:      ['podsecuritypolicies']
   verbs:          ['use']
-  resourceNames:  [{{ include "fourkeys.fullname" . }}]
+  resourceNames:  [{{ include "watchops.fullname" . }}]
 {{- end }}

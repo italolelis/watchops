@@ -3,9 +3,9 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: {{ include "fourkeys.name" . }}-namespace-only
+  name: {{ include "watchops.name" . }}-namespace-only
   labels:
-    {{- include "fourkeys.labels" . | nindent 4 }}
+    {{- include "watchops.labels" . | nindent 4 }}
 spec:
   policyTypes:
     - Ingress
@@ -22,14 +22,14 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: {{ include "fourkeys.name" . }}-ingress
+  name: {{ include "watchops.name" . }}-ingress
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "fourkeys.labels" . | nindent 4 }}
+    {{- include "watchops.labels" . | nindent 4 }}
 spec:
   podSelector:
     matchLabels:
-      {{- include "fourkeys.selectorLabels" . | nindent 6 }}
+      {{- include "watchops.selectorLabels" . | nindent 6 }}
   ingress:
   - from:
     {{- if .Values.networkPolicy.ingress.namespaceSelector }}
@@ -52,15 +52,15 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: {{ include "fourkeys.name" . }}-egress-alertmanager
+  name: {{ include "watchops.name" . }}-egress-alertmanager
   labels:
-    {{- include "fourkeys.labels" . | nindent 4 }}
+    {{- include "watchops.labels" . | nindent 4 }}
 spec:
   policyTypes:
     - Egress
   podSelector:
     matchLabels:
-      {{- include "fourkeys.selectorLabels" . | nindent 6 }}
+      {{- include "watchops.selectorLabels" . | nindent 6 }}
   egress:
     - ports:
         - port: {{ .Values.networkPolicy.alertmanager.port }}

@@ -49,5 +49,5 @@ jobs:
       with:
         files: ./coverage.out
         fail_ci_if_error: true
-        name: codecov-fourkeys
+        name: codecov-watchops
         verbose: true

@@ -1,4 +1,4 @@
-# {{ template "chart.header" . }} Helm Chart
+{{ template "chart.header" . }} Helm Chart
 
 {{ template "chart.badgesSection" . }}
 
@@ -17,7 +17,7 @@
 ## Get Repo Info
 
 ```console
-$ helm repo add italolelis https://italolelis.github.io/fourkeys
+$ helm repo add italolelis https://italolelis.github.io/watchops
 $ helm repo update
 ```
 
@@ -28,7 +28,7 @@ _See [helm repo](https://helm.sh/docs/helm/helm_repo/) for command documentation
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release italolelis/fourkeys
+helm install my-release italolelis/watchops
 ```
 
 ## Uninstalling the Chart

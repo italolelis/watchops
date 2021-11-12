@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "fourkeys.name" -}}
+{{- define "watchops.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -11,7 +11,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "fourkeys.fullname" -}}
+{{- define "watchops.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -27,16 +27,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "fourkeys.chart" -}}
+{{- define "watchops.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Common labels
 */}}
-{{- define "fourkeys.labels" -}}
-app.kubernetes.io/name: {{ include "fourkeys.name" . }}
-helm.sh/chart: {{ include "fourkeys.chart" . }}
+{{- define "watchops.labels" -}}
+app.kubernetes.io/name: {{ include "watchops.name" . }}
+helm.sh/chart: {{ include "watchops.chart" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
@@ -44,17 +44,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "fourkeys.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "fourkeys.name" . }}
+{{- define "watchops.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "watchops.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account
 */}}
-{{- define "fourkeys.serviceAccountName" -}}
+{{- define "watchops.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "fourkeys.fullname" .) .Values.serviceAccount.name }}
+    {{ default (include "watchops.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}

@@ -1,4 +1,4 @@
-CREATE TABLE fourkeys.events_raw (
+CREATE TABLE watchops.events_raw (
     id VARCHAR NOT NULL,
     event_type VARCHAR NOT NULL,
     metadata SUPER NOT NULL,

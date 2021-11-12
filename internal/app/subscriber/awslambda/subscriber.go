@@ -7,8 +7,8 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/italolelis/fourkeys/internal/app/wh"
-	"github.com/italolelis/fourkeys/internal/pkg/log"
+	"github.com/italolelis/watchops/internal/app/wh"
+	"github.com/italolelis/watchops/internal/pkg/log"
 )
 
 type handlerFunc func(ctx context.Context, payload []byte, headers map[string][]string) error

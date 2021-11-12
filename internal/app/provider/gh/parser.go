@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/google/go-github/github"
-	"github.com/italolelis/fourkeys/internal/app/provider"
+	"github.com/italolelis/watchops/internal/app/provider"
 )
 
 const (

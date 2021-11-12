@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi"
-	"github.com/italolelis/fourkeys/internal/app/provider"
-	"github.com/italolelis/fourkeys/internal/app/wh"
-	"github.com/italolelis/fourkeys/internal/pkg/log"
+	"github.com/italolelis/watchops/internal/app/provider"
+	"github.com/italolelis/watchops/internal/app/wh"
+	"github.com/italolelis/watchops/internal/pkg/log"
 )
 
 type WebhookHandler struct {

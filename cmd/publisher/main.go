@@ -11,14 +11,14 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/heptiolabs/healthcheck"
-	"github.com/italolelis/fourkeys/internal/app/http/rest"
-	"github.com/italolelis/fourkeys/internal/app/provider/gh"
-	"github.com/italolelis/fourkeys/internal/app/provider/opsgenie"
-	"github.com/italolelis/fourkeys/internal/app/publisher"
-	"github.com/italolelis/fourkeys/internal/app/publisher/kinesis"
-	"github.com/italolelis/fourkeys/internal/app/wh"
-	"github.com/italolelis/fourkeys/internal/pkg/log"
-	"github.com/italolelis/fourkeys/internal/pkg/signal"
+	"github.com/italolelis/watchops/internal/app/http/rest"
+	"github.com/italolelis/watchops/internal/app/provider/gh"
+	"github.com/italolelis/watchops/internal/app/provider/opsgenie"
+	"github.com/italolelis/watchops/internal/app/publisher"
+	"github.com/italolelis/watchops/internal/app/publisher/kinesis"
+	"github.com/italolelis/watchops/internal/app/wh"
+	"github.com/italolelis/watchops/internal/pkg/log"
+	"github.com/italolelis/watchops/internal/pkg/signal"
 	"github.com/kelseyhightower/envconfig"
 )
 

@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/italolelis/fourkeys/internal/app/provider/gh"
-	"github.com/italolelis/fourkeys/internal/app/storage"
-	"github.com/italolelis/fourkeys/internal/app/stream"
-	"github.com/italolelis/fourkeys/internal/app/subscriber"
-	"github.com/italolelis/fourkeys/internal/app/subscriber/kinesis"
-	"github.com/italolelis/fourkeys/internal/pkg/log"
+	"github.com/italolelis/watchops/internal/app/provider/gh"
+	"github.com/italolelis/watchops/internal/app/storage"
+	"github.com/italolelis/watchops/internal/app/stream"
+	"github.com/italolelis/watchops/internal/app/subscriber"
+	"github.com/italolelis/watchops/internal/app/subscriber/kinesis"
+	"github.com/italolelis/watchops/internal/pkg/log"
 	"github.com/kelseyhightower/envconfig"
 )
 

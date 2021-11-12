@@ -1,4 +1,4 @@
-# Four Keys
+# WatchOps
 
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/italolelis/fourkeys/Main)
 ![Codecov](https://img.shields.io/codecov/c/github/italolelis/fourkeys)
@@ -8,11 +8,13 @@
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/italolelis/fourkeys)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/italolelis/fourkeys)
 
-Four Keys is a [project](https://cloud.google.com/blog/products/devops-sre/using-the-four-keys-to-measure-your-devops-performance) that Google first introduced in the Accelerator book and the DevOps Research and Assessment (DORA). 
+![](images/cover.png)
 
-I created this project to turn Four Keys into a more accessible and easier to use application. Currently, you can only use the [open source project](https://github.com/GoogleCloudPlatform/fourkeys) provided by Google in GoogleCloud, kind of out-of-the-box.
+WatchOps is that implements the [four keys](https://cloud.google.com/blog/products/devops-sre/using-the-four-keys-to-measure-your-devops-performance) metrics, introduced by Google in the Accelerator book and the DevOps Research and Assessment (DORA).
 
-Over here, you can use Four Keys on any platform. It's even easier to get started if you have Kubernetes, no matter where (EKS, GCP, Azure, or self-hosted).
+I created this project to turn four keys into a more accessible and easier to use application. Currently, you can only use the [open source project](https://github.com/GoogleCloudPlatform/fourkeys) provided by Google in GoogleCloud, kind of out-of-the-box.
+
+You can use WatchOps on any platform. It's even easier to get started if you have Kubernetes, no matter where (EKS, GCP, Azure, or self-hosted).
 
 ## Installation
 
@@ -23,9 +25,9 @@ Over here, you can use Four Keys on any platform. It's even easier to get starte
 Once Helm is set up properly, add the repo as follows:
 
 ```console
-$ helm repo add italolelis https://italolelis.github.io/fourkeys
+$ helm repo add italolelis https://italolelis.github.io/watchops
 $ helm repo update
-$ helm install my-release italolelis/fourkeys
+$ helm install my-release italolelis/watchops
 ```
 
 ## About the project

@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
-	"github.com/italolelis/fourkeys/internal/app/provider"
+	"github.com/italolelis/watchops/internal/app/provider"
 	"github.com/stretchr/testify/require"
 )
 
@@ -32,7 +32,7 @@ func TestEventDataRepository_Add(t *testing.T) {
 		Source:      "source",
 	}
 
-	const query = "INSERT INTO fourkeys.events_raw"
+	const query = "INSERT INTO watchops.events_raw"
 
 	mock.ExpectExec(query).
 		WithArgs(e.ID, e.EventType, e.Metadata, e.TimeCreated, e.Signature, e.MsgID, e.Source).
@@ -60,7 +60,7 @@ func TestEventDataRepository_Add_Failure(t *testing.T) {
 		Source:      "source",
 	}
 
-	const query = "INSERT INTO fourkeys.events_raw"
+	const query = "INSERT INTO watchops.events_raw"
 
 	mock.ExpectExec(query).
 		WithArgs(e.ID, e.EventType, e.Metadata, e.TimeCreated, e.Signature, e.MsgID, e.Source).

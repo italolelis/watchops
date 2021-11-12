@@ -1,10 +1,10 @@
 apiVersion: v2
 appVersion: "v1.0.0"
 description: "This repository implements the four key metrics coined by Google and introduced in Accelerate: Time to Restore, Lead Time to Change, Deployment Frequency, and Change Failure Rate."
-name: fourkeys
+name: watchops
 version: 1.2.3
 sources:
-  - https://github.com/italolelis/fourkeys
+  - https://github.com/italolelis/watchops
 maintainers:
   - name: italolelis
     email: me@italovietro.com

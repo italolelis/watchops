@@ -3,10 +3,10 @@
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
-  name: {{ template "fourkeys.fullname" . }}
+  name: {{ template "watchops.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-{{ include "fourkeys.labels" . | indent 4 }}
+{{ include "watchops.labels" . | indent 4 }}
 spec:
   privileged: false
   allowPrivilegeEscalation: false

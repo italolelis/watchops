@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/italolelis/fourkeys/internal/app/provider"
+	"github.com/italolelis/watchops/internal/app/provider"
 )
 
 type (
@@ -22,7 +22,7 @@ func NewEventDataWriter(db *sql.DB) *EventDataWriter {
 func (w *EventDataWriter) Add(ctx context.Context, eventData provider.Event) error {
 	const query = `
 		INSERT INTO 
-			fourkeys.events_raw(id, event_type, metadata, time_created, signature, msg_id, source) 
+			watchops.events_raw(id, event_type, metadata, time_created, signature, msg_id, source) 
 			VALUES ($1, $2, $3, $4, $5, $6, $7)
 	`
 

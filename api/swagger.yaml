@@ -58,5 +58,5 @@ security:
   - GithubAPIKey: []
   - OpsGenieAPIKey: []
 tags:
-  - name: Fourkeys
-    description: Fourkeys endpoints.
+  - name: WatchOps
+    description: WatchOps endpoints.

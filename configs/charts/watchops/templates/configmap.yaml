@@ -4,9 +4,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "fourkeys.fullname" $ }}-app
+  name: {{ template "watchops.fullname" $ }}-app
   labels:
-{{ include "fourkeys.labels" $ | indent 4 }}
+{{ include "watchops.labels" $ | indent 4 }}
 data:
   PORT: {{ .config.port | quote }}
   LOG_LEVEL: {{ .config.logLevel | quote }}
@@ -24,9 +24,9 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "fourkeys.fullname" $ }}-subscriber-{{ $name }}
+  name: {{ template "watchops.fullname" $ }}-subscriber-{{ $name }}
   labels:
-{{ include "fourkeys.labels" $ | indent 4 }}
+{{ include "watchops.labels" $ | indent 4 }}
 data:
   LOG_LEVEL: {{ .config.logLevel | quote }}
   DATABASE_DRIVER: {{ .config.database.driver | quote }}

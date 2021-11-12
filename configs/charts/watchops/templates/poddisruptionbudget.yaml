@@ -3,9 +3,9 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ template "fourkeys.fullname" . }}
+  name: {{ template "watchops.fullname" . }}
   labels:
-{{ include "fourkeys.labels" . | indent 4 }}
+{{ include "watchops.labels" . | indent 4 }}
 spec:
   {{- if .Values.pdb.minAvailable }}
   minAvailable: {{ .Values.pdb.minAvailable }}
@@ -15,5 +15,5 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-    {{- include "fourkeys.selectorLabels" . | nindent 4 }}
+    {{- include "watchops.selectorLabels" . | nindent 4 }}
 {{- end }}

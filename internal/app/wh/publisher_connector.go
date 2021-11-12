@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/italolelis/fourkeys/internal/app/publisher"
+	"github.com/italolelis/watchops/internal/app/publisher"
 )
 
 // ErrSourceNotSupported is returned when the source is not supported.

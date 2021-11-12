@@ -1,2 +1,2 @@
-DROP TABLE fourkeys.events_raw;
-DROp SCHEMA fourkeys;
+DROP TABLE watchops.events_raw;
+DROp SCHEMA watchops;

@@ -10,8 +10,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
 	consumer "github.com/harlow/kinesis-consumer"
-	"github.com/italolelis/fourkeys/internal/app/wh"
-	"github.com/italolelis/fourkeys/internal/pkg/log"
+	"github.com/italolelis/watchops/internal/app/wh"
+	"github.com/italolelis/watchops/internal/pkg/log"
 )
 
 var (

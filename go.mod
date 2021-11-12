@@ -1,4 +1,4 @@
-module github.com/italolelis/fourkeys
+module github.com/italolelis/watchops
 
 go 1.17
 

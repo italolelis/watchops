@@ -4,14 +4,14 @@
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "fourkeys.fullname" $ }}-{{ $name }}
+  name: {{ include "watchops.fullname" $ }}-{{ $name }}
   labels:
-    {{- include "fourkeys.labels" $ | nindent 4 }}
+    {{- include "watchops.labels" $ | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "fourkeys.fullname" $ }}-{{ $name }}
+    name: {{ include "watchops.fullname" $ }}-{{ $name }}
   minReplicas: {{ $hpa.minReplicas }}
   maxReplicas: {{ $hpa.maxReplicas }}
   metrics:

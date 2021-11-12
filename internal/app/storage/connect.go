@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/italolelis/fourkeys/internal/app/provider"
-	"github.com/italolelis/fourkeys/internal/app/storage/postgres"
-	"github.com/italolelis/fourkeys/internal/app/storage/redshift"
+	"github.com/italolelis/watchops/internal/app/provider"
+	"github.com/italolelis/watchops/internal/app/storage/postgres"
+	"github.com/italolelis/watchops/internal/app/storage/redshift"
 	_ "github.com/lib/pq"
 )
 

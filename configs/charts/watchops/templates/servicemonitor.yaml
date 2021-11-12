@@ -4,13 +4,13 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "fourkeys.fullname" . }}
+  name: {{ template "watchops.fullname" . }}
   labels:
-{{ include "fourkeys.labels" . | indent 4 }}
+{{ include "watchops.labels" . | indent 4 }}
 spec:
   selector:
     matchLabels:
-      {{- include "fourkeys.selectorLabels" . | nindent 6 }}
+      {{- include "watchops.selectorLabels" . | nindent 6 }}
   endpoints:
   - port: {{ .Values.serviceMonitor.port | default "http-probe" }}
     path: {{ .Values.serviceMonitor.path }}

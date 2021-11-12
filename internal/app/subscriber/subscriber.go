@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/italolelis/fourkeys/internal/app/subscriber/awslambda"
-	"github.com/italolelis/fourkeys/internal/app/subscriber/kinesis"
+	"github.com/italolelis/watchops/internal/app/subscriber/awslambda"
+	"github.com/italolelis/watchops/internal/app/subscriber/kinesis"
 )
 
 type (

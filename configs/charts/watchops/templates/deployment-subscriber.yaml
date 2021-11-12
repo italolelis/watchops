@@ -5,13 +5,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "fourkeys.fullname" $ }}-subscriber-{{ $name }}
+  name: {{ template "watchops.fullname" $ }}-subscriber-{{ $name }}
 {{- with .annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
 {{- end }}
   labels:
-{{ include "fourkeys.labels" $ | indent 4 }}
+{{ include "watchops.labels" $ | indent 4 }}
 {{- if .labels }}
 {{ toYaml .labels | indent 4 }}
 {{- end }}
@@ -19,24 +19,24 @@ spec:
   replicas: {{ .replicaCount }}
   selector:
     matchLabels:
-    {{- include "fourkeys.selectorLabels" $ | nindent 6 }}
+    {{- include "watchops.selectorLabels" $ | nindent 6 }}
   strategy:
 {{ toYaml .strategy | indent 4 }}
   template:
     metadata:
-      name: {{ template "fourkeys.fullname" $ }}
+      name: {{ template "watchops.fullname" $ }}
 {{- if .podAnnotations }}
       annotations:
 {{ toYaml .podAnnotations | indent 8 }}
 {{- end }}
       labels:
-        {{- include "fourkeys.selectorLabels" $ | nindent 8 }}
+        {{- include "watchops.selectorLabels" $ | nindent 8 }}
     spec:
       {{- with .imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ template "fourkeys.serviceAccountName" $ }}
+      serviceAccountName: {{ template "watchops.serviceAccountName" $ }}
       securityContext:
         {{- toYaml .podSecurityContext | nindent 8 }}
       containers:
@@ -47,9 +47,9 @@ spec:
           imagePullPolicy: {{ .image.pullPolicy }}
           envFrom:
             - configMapRef:
-                name: {{ template "fourkeys.fullname" $ }}-subscriber-{{ $name }}
+                name: {{ template "watchops.fullname" $ }}-subscriber-{{ $name }}
             - secretRef:
-                name: {{ template "fourkeys.fullname" $ }}-subscriber-{{ $name }}
+                name: {{ template "watchops.fullname" $ }}-subscriber-{{ $name }}
           env:
             - name: KUBERNETES_NODE_IP
               valueFrom:

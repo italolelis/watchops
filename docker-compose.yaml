@@ -19,6 +19,6 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: "fourkeys"
+      POSTGRES_USER: "watchops"
       POSTGRES_PASSWORD: "qwerty123"
-      POSTGRES_DB: "fourkeys-db"
+      POSTGRES_DB: "watchops-db"
