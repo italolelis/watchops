@@ -90,4 +90,22 @@ entries:
     urls:
     - https://github.com/italolelis/fourkeys/releases/download/fourkeys-1.0.0/fourkeys-1.0.0.tgz
     version: 1.0.0
-generated: "2021-11-11T22:59:59.916761153Z"
+  watchops:
+  - apiVersion: v2
+    appVersion: v1.0.0
+    created: "2021-11-12T22:11:49.053123006Z"
+    description: 'This repository implements the four key metrics coined by Google
+      and introduced in Accelerate: Time to Restore, Lead Time to Change, Deployment
+      Frequency, and Change Failure Rate.'
+    digest: 7bcffec90400c9075852aad87e3a65d84aa25170582ccc2bd844c80d13ba19db
+    maintainers:
+    - email: me@italovietro.com
+      name: italolelis
+    name: watchops
+    sources:
+    - https://github.com/italolelis/watchops
+    type: application
+    urls:
+    - https://github.com/italolelis/fourkeys/releases/download/watchops-1.2.3/watchops-1.2.3.tgz
+    version: 1.2.3
+generated: "2021-11-12T22:11:49.053151201Z"
