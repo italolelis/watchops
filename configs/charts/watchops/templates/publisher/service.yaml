@@ -23,5 +23,5 @@ spec:
       targetPort: {{ .Values.service.probeTargetPort | default "http-probe" }}
       protocol: TCP
       name: http-probe
-  selector:
-    {{- include "watchops.selectorLabels" . | nindent 4 }}
+  selector: {{- include "watchops.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: publisher

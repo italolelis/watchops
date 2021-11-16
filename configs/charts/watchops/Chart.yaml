@@ -9,3 +9,9 @@ maintainers:
   - name: italolelis
     email: me@italovietro.com
 type: application
+dependencies:
+- name: postgresql
+  version: 10.x.x
+  repository: https://charts.bitnami.com/bitnami
+  condition: postgresql.enabled
+

@@ -9,16 +9,16 @@ metadata:
   annotations:
 {{ toYaml . | indent 4 }}
 {{- end }}
-  labels:
-{{ include "watchops.labels" $ | indent 4 }}
+  labels: {{- include "watchops.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: publisher
 {{- if .labels }}
 {{ toYaml .labels | indent 4 }}
 {{- end }}
 spec:
   replicas: {{ .replicaCount }}
   selector:
-    matchLabels:
-    {{- include "watchops.selectorLabels" $ | nindent 6 }}
+    matchLabels: {{- include "watchops.selectorLabels" $ | nindent 6 }}
+      app.kubernetes.io/component: publisher
   strategy:
 {{ toYaml .strategy | indent 4 }}
   template:
@@ -28,8 +28,8 @@ spec:
       annotations:
 {{ toYaml .podAnnotations | indent 8 }}
 {{- end }}
-      labels:
-        {{- include "watchops.selectorLabels" $ | nindent 8 }}
+      labels: {{- include "watchops.selectorLabels" $ | nindent 8 }}
+        app.kubernetes.io/component: publisher
     spec:
       {{- with .imagePullSecrets }}
       imagePullSecrets:

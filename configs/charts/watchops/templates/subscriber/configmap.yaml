@@ -1,22 +1,3 @@
-{{- with .Values.publisher }}
-{{- if .enabled }}
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ template "watchops.fullname" $ }}-publisher
-  labels:
-{{ include "watchops.labels" $ | indent 4 }}
-data:
-  PORT: {{ .config.port | quote }}
-  LOG_LEVEL: {{ .config.logLevel | quote }}
-  REST_READ_TIMEOUT: {{ .config.rest.readTimeout | quote }}
-  REST_WRITE_TIMEOUT: {{ .config.rest.writeTimeout | quote }}
-  REST_IDLE_TIMEOUT: {{ .config.rest.idleTimeout | quote }}
-  TOPIC_PREFIX: {{ .config.messageBroker.topicPrefix | quote }}
-{{- end }}
-{{- end }}
-
 {{- range $name, $subscriber := .Values.subscribers }}
 {{- with $subscriber }}
 {{- if .enabled }}

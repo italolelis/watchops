@@ -1,7 +1,7 @@
-# Watchops
+# watchops
  Helm Chart
 
-![Version: 1.2.3](https://img.shields.io/badge/Version-1.2.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
+![Version: 1.2.4](https://img.shields.io/badge/Version-1.2.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
 
 This repository implements the four key metrics coined by Google and introduced in Accelerate: Time to Restore, Lead Time to Change, Deployment Frequency, and Change Failure Rate.
 
@@ -48,49 +48,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| app.affinity | object | `{}` |  |
-| app.annotations | object | `{}` |  |
-| app.config.githubSecret | string | `""` | Sets the github secret that will be use to validate incoming webhooks from GitHub. |
-| app.config.logLevel | string | `"info"` | Define the log level. Accepted values are: debug, info, warn, error. |
-| app.config.messageBroker.singleTopic | bool | `false` | Whether to use a single topic for all incomming webhooks or not. |
-| app.config.messageBroker.topicPrefix | string | `"watchops_"` | If you defined multiple topics (one for each incoming webhook type), then you can define the prefix of these topics. |
-| app.config.opsgenieSecret | string | `""` | Sets the OpsGenie secret that will be used to validate incoming webhooks from OpsGenie. |
-| app.config.port | int | `8080` | Configure the port number of the main API. |
-| app.config.rest.idleTimeout | string | `"30s"` | Defines the idle server timeout. |
-| app.config.rest.readTimeout | string | `"30s"` | Defines the read server timeout. |
-| app.config.rest.writeTimeout | string | `"30s"` | Defines the write server timeout. |
-| app.enabled | bool | `true` |  |
-| app.image.repository | string | `"ghcr.io/italolelis/watchops"` |  |
-| app.image.tag | string | `"latest"` |  |
-| app.imagePullSecrets | list | `[]` |  |
-| app.labels | object | `{}` |  |
-| app.livenessProbe.failureThreshold | int | `3` |  |
-| app.livenessProbe.httpGet.path | string | `"/live"` |  |
-| app.livenessProbe.httpGet.port | string | `"http-probe"` |  |
-| app.livenessProbe.initialDelaySeconds | int | `10` |  |
-| app.livenessProbe.periodSeconds | int | `10` |  |
-| app.livenessProbe.successThreshold | int | `1` |  |
-| app.livenessProbe.timeoutSeconds | int | `1` |  |
-| app.nodeSelector | object | `{}` |  |
-| app.podAnnotations | object | `{}` |  |
-| app.podSecurityContext | object | `{}` |  |
-| app.readinessProbe.failureThreshold | int | `3` |  |
-| app.readinessProbe.httpGet.path | string | `"/ready"` |  |
-| app.readinessProbe.httpGet.port | string | `"http-probe"` |  |
-| app.readinessProbe.initialDelaySeconds | int | `15` |  |
-| app.readinessProbe.periodSeconds | int | `10` |  |
-| app.readinessProbe.successThreshold | int | `1` |  |
-| app.readinessProbe.timeoutSeconds | int | `1` |  |
-| app.replicaCount | int | `1` |  |
-| app.resources.requests.cpu | string | `"20m"` |  |
-| app.resources.requests.memory | string | `"30Mi"` |  |
-| app.securityContext | object | `{}` |  |
-| app.tolerations | list | `[]` |  |
-| autoscaling.app.enabled | bool | `false` | Enable autoscaling for the Four Keys main API. |
-| autoscaling.app.maxReplicas | int | `3` | Number of maximum replicas to scale up. |
-| autoscaling.app.minReplicas | int | `1` | Number of minimum replicas to scale down. |
-| autoscaling.app.targetCPUUtilizationPercentage | int | `80` | Target CPU utilization percentage. |
-| autoscaling.app.targetMemoryUtilizationPercentage | int | `50` | Target memory utilization percentage. |
+| autoscaling.publisher.enabled | bool | `false` | Enable autoscaling for the Four Keys main API. |
+| autoscaling.publisher.maxReplicas | int | `3` | Number of maximum replicas to scale up. |
+| autoscaling.publisher.minReplicas | int | `1` | Number of minimum replicas to scale down. |
+| autoscaling.publisher.targetCPUUtilizationPercentage | int | `80` | Target CPU utilization percentage. |
+| autoscaling.publisher.targetMemoryUtilizationPercentage | int | `50` | Target memory utilization percentage. |
 | ingress.annotations | object | `{}` | Ingress annotations (values are templated) |
 | ingress.enabled | bool | `false` | Enables Ingress |
 | ingress.hosts[0].backend.serviceName | string | `"chart-example.local"` |  |
@@ -99,14 +61,64 @@ The command removes all the Kubernetes components associated with the chart and 
 | ingress.hosts[0].paths[0] | string | `"/"` |  |
 | ingress.tls | list | `[]` | Ingress TLS configuration |
 | migrations.enabled | bool | `false` | Enable migrations to your datasource. |
+| migrations.labels | object | `{}` |  |
 | networkPolicy.enabled | bool | `false` | Whether to enable network policies. If your cluster supports it, I recommend enabling it. |
 | pdb.enabled | bool | `true` |  |
 | pdb.minAvailable | int | `1` |  |
+| postgresql.enabled | bool | `true` |  |
+| postgresql.existingSecret | string | `""` | The name of a pre-created secret containing the postgres password |
+| postgresql.existingSecretKey | string | `"postgresql-password"` | The key within `postgresql.existingSecret` containing the password string |
+| postgresql.persistence.accessModes | list | `["ReadWriteOnce"]` | The access modes of the PVC |
+| postgresql.persistence.enabled | bool | `true` |  |
+| postgresql.persistence.size | string | `"8Gi"` | The size of PVC to request |
+| postgresql.persistence.storageClass | string | `""` | The name of the StorageClass used by the PVC |
+| postgresql.postgresqlDatabase | string | `"watchops"` | The postgres database to use |
+| postgresql.postgresqlPassword | string | `"watchops"` | Tthe postgres user's password. You should NOT use this, instead specify `postgresql.existingSecret` |
+| postgresql.postgresqlUsername | string | `"watchops"` | The postgres user to create |
 | prometheusRule.annotations | object | `{}` | PrometheusRule annotations |
 | prometheusRule.enabled | bool | `false` | If enabled, a PrometheusRule resource for Prometheus Operator is created |
 | prometheusRule.groups | list | `[]` | Contents of Prometheus rules file |
 | prometheusRule.labels | object | `{}` | Additional PrometheusRule labels |
 | prometheusRule.namespace | string | `nil` | Alternative namespace for the PrometheusRule resource |
+| publisher.affinity | object | `{}` |  |
+| publisher.annotations | object | `{}` |  |
+| publisher.config.githubSecret | string | `""` | Sets the github secret that will be use to validate incoming webhooks from GitHub. |
+| publisher.config.logLevel | string | `"info"` | Define the log level. Accepted values are: debug, info, warn, error. |
+| publisher.config.messageBroker.driver | string | `"kinesis"` | Defines which message broker to use. You can choose between kinesis or awslambda (which is also based on kinesis). |
+| publisher.config.messageBroker.singleTopic | bool | `false` | Whether to use a single topic for all incomming webhooks or not. |
+| publisher.config.messageBroker.topicPrefix | string | `"watchops_"` | If you defined multiple topics (one for each incoming webhook type), then you can define the prefix of these topics. |
+| publisher.config.opsgenieSecret | string | `""` | Sets the OpsGenie secret that will be used to validate incoming webhooks from OpsGenie. |
+| publisher.config.port | int | `8080` | Configure the port number of the main API. |
+| publisher.config.rest.idleTimeout | string | `"30s"` | Defines the idle server timeout. |
+| publisher.config.rest.readTimeout | string | `"30s"` | Defines the read server timeout. |
+| publisher.config.rest.writeTimeout | string | `"30s"` | Defines the write server timeout. |
+| publisher.enabled | bool | `true` |  |
+| publisher.image.repository | string | `"ghcr.io/italolelis/watchops-publisher"` |  |
+| publisher.image.tag | string | `"latest"` |  |
+| publisher.imagePullSecrets | list | `[]` |  |
+| publisher.labels | object | `{}` |  |
+| publisher.livenessProbe.failureThreshold | int | `3` |  |
+| publisher.livenessProbe.httpGet.path | string | `"/live"` |  |
+| publisher.livenessProbe.httpGet.port | string | `"http-probe"` |  |
+| publisher.livenessProbe.initialDelaySeconds | int | `10` |  |
+| publisher.livenessProbe.periodSeconds | int | `10` |  |
+| publisher.livenessProbe.successThreshold | int | `1` |  |
+| publisher.livenessProbe.timeoutSeconds | int | `1` |  |
+| publisher.nodeSelector | object | `{}` |  |
+| publisher.podAnnotations | object | `{}` |  |
+| publisher.podSecurityContext | object | `{}` |  |
+| publisher.readinessProbe.failureThreshold | int | `3` |  |
+| publisher.readinessProbe.httpGet.path | string | `"/ready"` |  |
+| publisher.readinessProbe.httpGet.port | string | `"http-probe"` |  |
+| publisher.readinessProbe.initialDelaySeconds | int | `15` |  |
+| publisher.readinessProbe.periodSeconds | int | `10` |  |
+| publisher.readinessProbe.successThreshold | int | `1` |  |
+| publisher.readinessProbe.timeoutSeconds | int | `1` |  |
+| publisher.replicaCount | int | `1` |  |
+| publisher.resources.requests.cpu | string | `"20m"` |  |
+| publisher.resources.requests.memory | string | `"30Mi"` |  |
+| publisher.securityContext | object | `{}` |  |
+| publisher.tolerations | list | `[]` |  |
 | rbac.create | bool | `true` |  |
 | rbac.pspEnabled | bool | `true` |  |
 | service.port | int | `80` |  |
@@ -137,8 +149,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | subscribers.github.config.messageBroker.store.redis.username | string | `""` | The redis username. If you are using the redis chart, you don't need to define this value. |
 | subscribers.github.config.messageBroker.streamName | string | `"watchops_github"` | Sets the name of the stream this subscriber will listen to. If you are using a single stream for all webhook types, then just define the name of that stream. |
 | subscribers.github.enabled | bool | `true` |  |
-| subscribers.github.image.repository | string | `"ghcr.io/italolelis/watchops"` |  |
-| subscribers.github.image.tag | string | `"subscriber-latest"` |  |
+| subscribers.github.image.repository | string | `"ghcr.io/italolelis/watchops-subscriber"` |  |
+| subscribers.github.image.tag | string | `"latest"` |  |
 | subscribers.github.imagePullSecrets | list | `[]` |  |
 | subscribers.github.labels | object | `{}` |  |
 | subscribers.github.livenessProbe | object | `{}` |  |

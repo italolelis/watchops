@@ -4,13 +4,13 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "watchops.fullname" . }}
+  name: {{ template "watchops.fullname" . }}-publisher
   labels:
 {{ include "watchops.labels" . | indent 4 }}
 spec:
   selector:
-    matchLabels:
-      {{- include "watchops.selectorLabels" . | nindent 6 }}
+    matchLabels: {{- include "watchops.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: publisher
   endpoints:
   - port: {{ .Values.serviceMonitor.port | default "http-probe" }}
     path: {{ .Values.serviceMonitor.path }}

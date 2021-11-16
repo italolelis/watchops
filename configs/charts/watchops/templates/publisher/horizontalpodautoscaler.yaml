@@ -5,8 +5,8 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "watchops.fullname" $ }}-{{ $name }}
-  labels:
-    {{- include "watchops.labels" $ | nindent 4 }}
+  labels: {{- include "watchops.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: publisher
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

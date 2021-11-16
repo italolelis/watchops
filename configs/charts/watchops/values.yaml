@@ -97,6 +97,8 @@ publisher:
       # -- Defines the idle server timeout.
       idleTimeout: "30s"
     messageBroker:
+      # -- Defines which message broker to use. You can choose between kinesis or awslambda (which is also based on kinesis).
+      driver: "kinesis"
       # -- Whether to use a single topic for all incomming webhooks or not.
       singleTopic: false
       # -- If you defined multiple topics (one for each incoming webhook type), then you can define the prefix of these topics.
@@ -225,3 +227,49 @@ prometheusRule:
   #       expr: sum(rate(loki_request_duration_seconds_bucket[1m])) by (le, job, route)
   #     - record: node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate
   #       expr: sum(rate(container_cpu_usage_seconds_total[1m])) by (node, namespace, pod, container)
+
+###################################
+# Database - PostgreSQL Chart
+# - https://github.com/bitnami/charts/tree/master/bitnami/postgresql
+###################################
+postgresql:
+  ## WARNING:
+  ## - This is NOT SUITABLE for production deployments of Airflow,
+  ##   you should seriously consider using an external database service,
+  ##   which can be configured with values under: `externalDatabase`
+  ##
+  # -- If the `bitnami/postgresql` chart is used. set to `false` if using an external database
+  enabled: true
+
+  # -- The postgres database to use
+  postgresqlDatabase: watchops
+
+  # -- The postgres user to create
+  postgresqlUsername: watchops
+
+  # -- Tthe postgres user's password. You should NOT use this, instead specify `postgresql.existingSecret`
+  postgresqlPassword: watchops
+
+  service:
+    port: 5432
+
+  # -- The name of a pre-created secret containing the postgres password
+  existingSecret: ""
+
+  # -- The key within `postgresql.existingSecret` containing the password string
+  existingSecretKey: "postgresql-password"
+
+  # Configs for the PVC of postgresql
+  persistence:
+    # - If postgres will use Persistent Volume Claims to store data. If false, data will be LOST as postgres Pods restart
+    enabled: true
+
+    # -- The name of the StorageClass used by the PVC
+    storageClass: ""
+
+    # -- The access modes of the PVC
+    accessModes:
+      - ReadWriteOnce
+
+    # -- The size of PVC to request
+    size: 8Gi

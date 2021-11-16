@@ -14,6 +14,6 @@ spec:
   maxUnavailable: {{ .Values.pdb.maxUnavailable }}
   {{- end }}
   selector:
-    matchLabels:
-    {{- include "watchops.selectorLabels" . | nindent 4 }}
+    matchLabels: {{- include "watchops.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: publisher
 {{- end }}
