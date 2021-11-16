@@ -18,3 +18,4 @@
 .tfvars
 bin
 dist
+configs/charts/watchops/charts
