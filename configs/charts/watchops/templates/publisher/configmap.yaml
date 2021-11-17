@@ -14,5 +14,6 @@ data:
   REST_WRITE_TIMEOUT: {{ .config.rest.writeTimeout | quote }}
   REST_IDLE_TIMEOUT: {{ .config.rest.idleTimeout | quote }}
   TOPIC_PREFIX: {{ .config.messageBroker.topicPrefix | quote }}
+  SINGLE_TOPIC: {{ .config.messageBroker.singleTopic | quote }}
 {{- end }}
 {{- end }}
