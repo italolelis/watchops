@@ -2,6 +2,8 @@ package provider
 
 import (
 	"context"
+	"crypto/sha1"
+	"encoding/base64"
 	"encoding/json"
 	"net/http"
 	"time"
@@ -33,4 +35,10 @@ type Event struct {
 	Signature   string          `json:"signature"`
 	MsgID       string          `json:"msg_id"`
 	Source      string          `json:"source"`
+}
+
+func GenerateSignature(value []byte) string {
+	hasher := sha1.New()
+	hasher.Write(value)
+	return base64.URLEncoding.EncodeToString(hasher.Sum(nil))
 }
