@@ -10,7 +10,7 @@
 
 ![](images/cover.png)
 
-Implement the [four keys](https://cloud.google.com/blog/products/devops-sre/using-the-four-keys-to-measure-your-devops-performance) metrics in your organization. These metrics help you better understand how your teams are performing when it comes to DevOps practices. Google introduced the four keys metrics in the Accelerator book and the DevOps Research and Assessment (DORA), used as the industry standard for high-performing teams.
+Implement the [four key](https://cloud.google.com/blog/products/devops-sre/using-the-four-keys-to-measure-your-devops-performance) metrics in your organization. These metrics help you better understand how your teams are performing when it comes to DevOps practices. Google introduced the four keys metrics in the Accelerator book and the DevOps Research and Assessment (DORA), used as the industry standard for high-performing teams.
 
 I created this project to turn four keys into a more accessible and easier to use application. Currently, you can only use the [open source project](https://github.com/GoogleCloudPlatform/fourkeys) provided by Google in GoogleCloud, kind of out-of-the-box.
 
