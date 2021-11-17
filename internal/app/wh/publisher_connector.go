@@ -25,6 +25,7 @@ type Connector interface {
 type PublisherConnector struct {
 	pub         publisher.Publisher
 	topicPrefix string
+	singleTopic bool
 }
 
 // MessageContainer is a container for the message that will be sent to the publisher.
@@ -35,8 +36,8 @@ type MessageContainer struct {
 }
 
 // NewPublisherConnector creates a new instance of PublisherConnector.
-func NewPublisherConnector(ctx context.Context, p publisher.Publisher, topicPrefix string) *PublisherConnector {
-	return &PublisherConnector{pub: p, topicPrefix: topicPrefix}
+func NewPublisherConnector(ctx context.Context, p publisher.Publisher, topicPrefix string, singleTopic bool) *PublisherConnector {
+	return &PublisherConnector{pub: p, topicPrefix: topicPrefix, singleTopic: singleTopic}
 }
 
 // Write sends the payload to the publisher.
@@ -46,7 +47,10 @@ func (w *PublisherConnector) Write(ctx context.Context, payload []byte, headers 
 		return ErrSourceNotSupported
 	}
 
-	streamName := w.topicPrefix + source
+	topicName := w.topicPrefix
+	if !w.singleTopic {
+		topicName += source
+	}
 
 	raw, err := json.Marshal(MessageContainer{
 		Source:  source,
@@ -57,7 +61,7 @@ func (w *PublisherConnector) Write(ctx context.Context, payload []byte, headers 
 		return fmt.Errorf("failed to marshal raw data to send to the message broker: %w", err)
 	}
 
-	return w.pub.Publish(ctx, streamName, raw)
+	return w.pub.Publish(ctx, topicName, raw)
 }
 
 func getSource(headers map[string][]string) string {
