@@ -15,7 +15,6 @@ import (
 	"github.com/italolelis/watchops/internal/app/provider/gh"
 	"github.com/italolelis/watchops/internal/app/provider/opsgenie"
 	"github.com/italolelis/watchops/internal/app/publisher"
-	"github.com/italolelis/watchops/internal/app/publisher/kinesis"
 	"github.com/italolelis/watchops/internal/app/wh"
 	"github.com/italolelis/watchops/internal/pkg/log"
 	"github.com/italolelis/watchops/internal/pkg/signal"
@@ -42,11 +41,9 @@ type config struct {
 	Opsgenie struct {
 		WebhookSecret string `split_words:"true"`
 	}
-	Kinesis struct {
-		Endpoint string
-		Region   string `default:"eu-central-1"`
-	}
-	TopicPrefix string `split_words:"true" default:"watchops"`
+	TopicPrefix   string           `split_words:"true" default:"watchops"`
+	SingleTopic   bool             `split_words:"true" default:"true"`
+	MessageBroker publisher.Config `split_words:"true"`
 }
 
 func main() {
@@ -80,14 +77,11 @@ func run(ctx context.Context) error {
 	log.SetLevel(cfg.LogLevel)
 
 	// =============================================
-	// Kinesis
+	// Message Broker
 	// =============================================
-	slog.Info("kinesis")
+	slog.Infow("building publisher", "driver", cfg.MessageBroker.Driver)
 
-	p, err := kinesis.NewPublisher(ctx, kinesis.SessionConfig{
-		Endpoint: cfg.Kinesis.Endpoint,
-		Region:   cfg.Kinesis.Region,
-	})
+	p, err := publisher.Build(ctx, cfg.MessageBroker)
 	if err != nil {
 		return fmt.Errorf("failed to create a new publisher: %w", err)
 	}
@@ -170,7 +164,7 @@ func setupProbeServer(cfg config) *http.Server {
 func setupServer(ctx context.Context, p publisher.Publisher, cfg config) *http.Server {
 	logger := log.WithContext(ctx)
 
-	webhook := wh.NewPublisherConnector(ctx, p, cfg.TopicPrefix)
+	webhook := wh.NewPublisherConnector(ctx, p, cfg.TopicPrefix, cfg.SingleTopic)
 	ghHandler := rest.NewWebhookHandler(webhook)
 
 	ghValidator := gh.NewValidator(cfg.Github.WebhookSecret)
