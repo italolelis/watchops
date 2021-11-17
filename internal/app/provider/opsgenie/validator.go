@@ -37,5 +37,5 @@ func (v *Validator) Validate(r *http.Request) error {
 }
 
 func (g *Validator) IsSupported(incomingProvider string) bool {
-	return "opsgenie" == incomingProvider
+	return sourceType == incomingProvider
 }
