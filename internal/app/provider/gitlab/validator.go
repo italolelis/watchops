@@ -37,5 +37,5 @@ func (v *Validator) Validate(r *http.Request) error {
 }
 
 func (g *Validator) IsSupported(incomingProvider string) bool {
-	return "gitlab" == incomingProvider
+	return sourceType == incomingProvider
 }
