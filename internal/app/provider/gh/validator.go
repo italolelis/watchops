@@ -28,5 +28,5 @@ func (g *Validator) Validate(r *http.Request) error {
 }
 
 func (g *Validator) IsSupported(incomingProvider string) bool {
-	return "github" == incomingProvider
+	return sourceType == incomingProvider
 }
