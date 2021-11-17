@@ -1,4 +1,4 @@
-package opsgenie
+package circleci
 
 import (
 	"encoding/json"
