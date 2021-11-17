@@ -21,7 +21,7 @@ var (
 type SessionConfig struct {
 	Endpoint   string
 	Region     string `required:"true"`
-	StreamName string `split_words:"true" required:"true"`
+	StreamName string `split_words:"true" default:"watchops"`
 	Store      StoreConfig
 }
 

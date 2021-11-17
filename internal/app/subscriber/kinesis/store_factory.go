@@ -13,7 +13,7 @@ import (
 
 type StoreConfig struct {
 	Driver  string `default:"memory"`
-	AppName string `split_words:"true"`
+	AppName string `split_words:"true" default:"watchops_consumer"`
 	Redis   struct {
 		Address  string
 		Password string

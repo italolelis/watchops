@@ -15,7 +15,7 @@ import (
 )
 
 type config struct {
-	LogLevel string `split_words:"true"`
+	LogLevel string `split_words:"true" default:"info"`
 	Database struct {
 		Driver          string        `default:"postgres"`
 		DSN             string        `required:"true"`

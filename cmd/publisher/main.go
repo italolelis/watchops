@@ -27,7 +27,7 @@ var version = "develop"
 const goRoutineCount = 100
 
 type config struct {
-	LogLevel string `split_words:"true"`
+	LogLevel string `split_words:"true" default:"info"`
 	Web      struct {
 		APIHost         string        `split_words:"true" default:"0.0.0.0:8080"`
 		ProbeHost       string        `split_words:"true" default:"0.0.0.0:9090"`
@@ -46,7 +46,7 @@ type config struct {
 		Endpoint string
 		Region   string `default:"eu-central-1"`
 	}
-	TopicPrefix string `split_words:"true"`
+	TopicPrefix string `split_words:"true" default:"watchops"`
 }
 
 func main() {
