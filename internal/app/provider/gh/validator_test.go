@@ -113,3 +113,10 @@ func TestValidateToken(t *testing.T) {
 		})
 	}
 }
+
+func TestValidator_IsSupported(t *testing.T) {
+	v := gh.NewValidator("valid")
+
+	assert.True(t, v.IsSupported("github"))
+	assert.False(t, v.IsSupported("wrong"))
+}

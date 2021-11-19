@@ -2,6 +2,7 @@ package circleci_test
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"strings"
 	"testing"
@@ -9,6 +10,12 @@ import (
 	"github.com/italolelis/watchops/internal/app/provider/circleci"
 	"github.com/stretchr/testify/assert"
 )
+
+type errReader int
+
+func (errReader) Read(p []byte) (n int, err error) {
+	return 0, errors.New("test error")
+}
 
 func TestValidateToken(t *testing.T) {
 	cases := []struct {
@@ -38,6 +45,20 @@ func TestValidateToken(t *testing.T) {
 					http.MethodPost,
 					"/",
 					http.NoBody,
+				)
+
+				return r
+			},
+			shouldFail: true,
+		},
+		{
+			name: "invalid body",
+			token: func() *http.Request {
+				r, _ := http.NewRequestWithContext(
+					context.Background(),
+					http.MethodPost,
+					"/",
+					errReader(0),
 				)
 
 				return r
@@ -103,4 +124,11 @@ func TestValidateToken(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestValidator_IsSupported(t *testing.T) {
+	v := circleci.NewValidator("valid")
+
+	assert.True(t, v.IsSupported("circleci"))
+	assert.False(t, v.IsSupported("wrong"))
 }

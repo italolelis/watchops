@@ -87,3 +87,10 @@ func TestValidateToken(t *testing.T) {
 		})
 	}
 }
+
+func TestValidator_IsSupported(t *testing.T) {
+	v := opsgenie.NewValidator("valid")
+
+	assert.True(t, v.IsSupported("opsgenie"))
+	assert.False(t, v.IsSupported("wrong"))
+}
