@@ -62,36 +62,36 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 		event.ID = strconv.Itoa(e.GetNumber())
 	case *github.PullRequestReviewEvent:
 		event.TimeCreated = e.GetReview().GetSubmittedAt()
-		event.ID = strconv.FormatInt(e.GetReview().GetID(), 2)
+		event.ID = strconv.FormatInt(e.GetReview().GetID(), 10)
 	case *github.PullRequestReviewCommentEvent:
 		event.TimeCreated = e.GetComment().GetUpdatedAt()
-		event.ID = strconv.FormatInt(e.GetComment().GetID(), 2)
+		event.ID = strconv.FormatInt(e.GetComment().GetID(), 10)
 	case *github.DeploymentEvent:
 		event.TimeCreated = e.GetDeployment().GetUpdatedAt().Time
-		event.ID = strconv.FormatInt(e.GetDeployment().GetID(), 2)
+		event.ID = strconv.FormatInt(e.GetDeployment().GetID(), 10)
 	case *github.DeploymentStatusEvent:
 		event.TimeCreated = e.GetDeploymentStatus().GetUpdatedAt().Time
-		event.ID = strconv.FormatInt(e.GetDeploymentStatus().GetID(), 2)
+		event.ID = strconv.FormatInt(e.GetDeploymentStatus().GetID(), 10)
 	case *github.IssuesEvent:
 		event.TimeCreated = e.GetIssue().GetUpdatedAt()
 		event.ID = e.GetRepo().GetName() + "/" + strconv.Itoa(e.GetIssue().GetNumber())
 	case *github.IssueCommentEvent:
 		event.TimeCreated = e.GetComment().GetUpdatedAt()
-		event.ID = strconv.FormatInt(e.GetComment().GetID(), 2)
+		event.ID = strconv.FormatInt(e.GetComment().GetID(), 10)
 	case *github.CheckRunEvent:
 		if !e.GetCheckRun().GetCompletedAt().Time.IsZero() {
 			event.TimeCreated = e.GetCheckRun().GetCompletedAt().Time
 		} else if !e.GetCheckRun().GetStartedAt().Time.IsZero() {
 			event.TimeCreated = e.GetCheckRun().GetStartedAt().Time
 		}
-		event.ID = strconv.FormatInt(e.GetCheckRun().GetID(), 2)
+		event.ID = strconv.FormatInt(e.GetCheckRun().GetID(), 10)
 	case *github.CheckSuiteEvent:
 		if !e.GetCheckSuite().GetApp().GetUpdatedAt().IsZero() {
 			event.TimeCreated = e.GetCheckSuite().GetApp().GetUpdatedAt()
 		} else if !e.GetCheckSuite().GetApp().GetCreatedAt().IsZero() {
 			event.TimeCreated = e.GetCheckSuite().GetApp().GetCreatedAt()
 		}
-		event.ID = strconv.FormatInt(e.GetCheckSuite().GetID(), 2)
+		event.ID = strconv.FormatInt(e.GetCheckSuite().GetID(), 10)
 	case *github.StatusEvent:
 		event.TimeCreated = e.GetUpdatedAt().Time
 		event.ID = strconv.FormatInt(e.GetID(), 2)
@@ -102,7 +102,7 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 			event.TimeCreated = e.GetRelease().GetPublishedAt().Time
 		}
 
-		event.ID = strconv.FormatInt(e.GetRelease().GetID(), 2)
+		event.ID = strconv.FormatInt(e.GetRelease().GetID(), 10)
 	default:
 		return provider.Event{}, fmt.Errorf("unsupported event type %s", eventType)
 	}

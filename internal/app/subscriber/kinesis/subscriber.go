@@ -93,7 +93,7 @@ func (s *Subscriber) Subscribe(ctx context.Context, fn func(ctx context.Context,
 		messageContainer.Headers["msg_id"] = append(messageContainer.Headers["msg_id"], *r.SequenceNumber)
 
 		arrivalTime := *r.ApproximateArrivalTimestamp
-		messageContainer.Headers["publish_time"] = append(messageContainer.Headers["publish_time"], strconv.FormatInt(arrivalTime.Unix(), 2))
+		messageContainer.Headers["publish_time"] = append(messageContainer.Headers["publish_time"], strconv.FormatInt(arrivalTime.Unix(), 10))
 
 		if err := fn(ctx, messageContainer.Payload, messageContainer.Headers); err != nil {
 			logger.Errorw("failed to process event", "err", err)
