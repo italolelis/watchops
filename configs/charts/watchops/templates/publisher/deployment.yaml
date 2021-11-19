@@ -46,9 +46,9 @@ spec:
           imagePullPolicy: {{ .image.pullPolicy }}
           envFrom:
             - configMapRef:
-                name: {{ template "watchops.fullname" $ }}-app
+                name: {{ template "watchops.fullname" $ }}-publisher
             - secretRef:
-                name: {{ template "watchops.fullname" $ }}-app
+                name: {{ template "watchops.fullname" $ }}-publisher
           env:
             - name: KUBERNETES_NODE_IP
               valueFrom:
