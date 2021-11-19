@@ -57,6 +57,8 @@ jobs:
       uses: docker/metadata-action@v3
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        flavor: |
+          latest=auto
         tags: |
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
@@ -68,6 +70,8 @@ jobs:
       uses: docker/metadata-action@v3
       with:
         images: ${{ env.REGISTRY }}/${{ env.SUBSCRIBER_IMAGE_NAME }}
+        flavor: |
+          latest=auto
         tags: |
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
