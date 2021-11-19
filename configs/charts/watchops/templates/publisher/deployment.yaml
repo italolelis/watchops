@@ -4,7 +4,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "watchops.fullname" $ }}
+  name: {{ template "watchops.fullname" $ }}-publisher
 {{- with .annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
