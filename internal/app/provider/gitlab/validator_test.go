@@ -1,10 +1,11 @@
-package gitlab
+package gitlab_test
 
 import (
 	"context"
 	"net/http"
 	"testing"
 
+	"github.com/italolelis/watchops/internal/app/provider/gitlab"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -19,7 +20,7 @@ func TestValidateToken(t *testing.T) {
 			token: func() *http.Request {
 				r, _ := http.NewRequestWithContext(
 					context.Background(),
-					http.MethodGet,
+					http.MethodPost,
 					"/", nil,
 				)
 
@@ -32,7 +33,7 @@ func TestValidateToken(t *testing.T) {
 			token: func() *http.Request {
 				r, _ := http.NewRequestWithContext(
 					context.Background(),
-					http.MethodGet,
+					http.MethodPost,
 					"/", nil,
 				)
 				r.Header.Add("X-Gitlab-Token", "")
@@ -46,7 +47,7 @@ func TestValidateToken(t *testing.T) {
 			token: func() *http.Request {
 				r, _ := http.NewRequestWithContext(
 					context.Background(),
-					http.MethodGet,
+					http.MethodPost,
 					"/", nil,
 				)
 				r.Header.Add("X-Gitlab-Token", "wrong")
@@ -60,7 +61,7 @@ func TestValidateToken(t *testing.T) {
 			token: func() *http.Request {
 				r, _ := http.NewRequestWithContext(
 					context.Background(),
-					http.MethodGet,
+					http.MethodPost,
 					"/", nil,
 				)
 				r.Header.Add("X-Gitlab-Token", "valid")
@@ -71,7 +72,7 @@ func TestValidateToken(t *testing.T) {
 		},
 	}
 
-	v := NewValidator("valid")
+	v := gitlab.NewValidator("valid")
 
 	for _, c := range cases {
 		c := c

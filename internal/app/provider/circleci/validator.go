@@ -29,13 +29,16 @@ func NewValidator(secret string) *Validator {
 func (v *Validator) Validate(r *http.Request) error {
 	var expectedSignature string = "v1="
 
-	h := hmac.New(sha256.New, []byte(v.secret))
+	if r.Body == nil {
+		return ErrReadBody
+	}
 
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
 		return ErrReadBody
 	}
 
+	h := hmac.New(sha256.New, []byte(v.secret))
 	h.Write(b)
 
 	expectedSignature += hex.EncodeToString(h.Sum(nil))

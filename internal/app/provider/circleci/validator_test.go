@@ -1,11 +1,12 @@
-package opsgenie_test
+package circleci_test
 
 import (
 	"context"
 	"net/http"
+	"strings"
 	"testing"
 
-	"github.com/italolelis/watchops/internal/app/provider/opsgenie"
+	"github.com/italolelis/watchops/internal/app/provider/circleci"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -21,7 +22,8 @@ func TestValidateToken(t *testing.T) {
 				r, _ := http.NewRequestWithContext(
 					context.Background(),
 					http.MethodPost,
-					"/", nil,
+					"/",
+					strings.NewReader("a=1&b=2"),
 				)
 
 				return r
@@ -29,14 +31,28 @@ func TestValidateToken(t *testing.T) {
 			shouldFail: true,
 		},
 		{
-			name: "empty token",
+			name: "empty body",
 			token: func() *http.Request {
 				r, _ := http.NewRequestWithContext(
 					context.Background(),
 					http.MethodPost,
+					"/",
+					http.NoBody,
+				)
+
+				return r
+			},
+			shouldFail: true,
+		},
+		{
+			name: "invalid header",
+			token: func() *http.Request {
+				r, _ := http.NewRequestWithContext(
+					context.Background(),
+					http.MethodGet,
 					"/", nil,
 				)
-				r.Header.Add("X-TOKEN", "")
+				r.Header.Add("Circleci-Signature", "")
 
 				return r
 			},
@@ -47,10 +63,10 @@ func TestValidateToken(t *testing.T) {
 			token: func() *http.Request {
 				r, _ := http.NewRequestWithContext(
 					context.Background(),
-					http.MethodPost,
+					http.MethodGet,
 					"/", nil,
 				)
-				r.Header.Add("X-TOKEN", "wrong")
+				r.Header.Add("Circleci-Signature", "wrong")
 
 				return r
 			},
@@ -61,10 +77,11 @@ func TestValidateToken(t *testing.T) {
 			token: func() *http.Request {
 				r, _ := http.NewRequestWithContext(
 					context.Background(),
-					http.MethodPost,
-					"/", nil,
+					http.MethodGet,
+					"/",
+					strings.NewReader("a=1&b=2"),
 				)
-				r.Header.Add("X-TOKEN", "valid")
+				r.Header.Add("Circleci-Signature", "v1=06fed32dbfee920451881ec80f4507536a8ae9cc696306e969a7a3a8f29940ec")
 
 				return r
 			},
@@ -72,7 +89,7 @@ func TestValidateToken(t *testing.T) {
 		},
 	}
 
-	v := opsgenie.NewValidator("valid")
+	v := circleci.NewValidator("valid")
 
 	for _, c := range cases {
 		c := c

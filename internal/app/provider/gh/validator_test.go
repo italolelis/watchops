@@ -1,11 +1,14 @@
-package opsgenie_test
+package gh_test
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"net/http"
+	"strings"
 	"testing"
 
-	"github.com/italolelis/watchops/internal/app/provider/opsgenie"
+	"github.com/italolelis/watchops/internal/app/provider/gh"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -21,7 +24,23 @@ func TestValidateToken(t *testing.T) {
 				r, _ := http.NewRequestWithContext(
 					context.Background(),
 					http.MethodPost,
-					"/", nil,
+					"/",
+					strings.NewReader("a=1&b=2"),
+				)
+				r.Header.Add("Content-Type", "application/json")
+
+				return r
+			},
+			shouldFail: true,
+		},
+		{
+			name: "empty body",
+			token: func() *http.Request {
+				r, _ := http.NewRequestWithContext(
+					context.Background(),
+					http.MethodPost,
+					"/",
+					http.NoBody,
 				)
 
 				return r
@@ -29,14 +48,14 @@ func TestValidateToken(t *testing.T) {
 			shouldFail: true,
 		},
 		{
-			name: "empty token",
+			name: "invalid header",
 			token: func() *http.Request {
 				r, _ := http.NewRequestWithContext(
 					context.Background(),
-					http.MethodPost,
+					http.MethodGet,
 					"/", nil,
 				)
-				r.Header.Add("X-TOKEN", "")
+				r.Header.Add("X-Hub-Signature", "")
 
 				return r
 			},
@@ -47,10 +66,10 @@ func TestValidateToken(t *testing.T) {
 			token: func() *http.Request {
 				r, _ := http.NewRequestWithContext(
 					context.Background(),
-					http.MethodPost,
+					http.MethodGet,
 					"/", nil,
 				)
-				r.Header.Add("X-TOKEN", "wrong")
+				r.Header.Add("X-Hub-Signature", "wrong")
 
 				return r
 			},
@@ -59,12 +78,19 @@ func TestValidateToken(t *testing.T) {
 		{
 			name: "correct token",
 			token: func() *http.Request {
+				body := map[string]interface{}{
+					"test": "test",
+				}
+				rawBody, _ := json.Marshal(body)
+
 				r, _ := http.NewRequestWithContext(
 					context.Background(),
-					http.MethodPost,
-					"/", nil,
+					http.MethodGet,
+					"/",
+					bytes.NewReader(rawBody),
 				)
-				r.Header.Add("X-TOKEN", "valid")
+				r.Header.Add("Content-Type", "application/json")
+				r.Header.Add("X-Hub-Signature", "sha256=92b251de78498d9b43dc0cd194b63b91cbf6d5ff8b2e3359f00d66bfbcc8efa6")
 
 				return r
 			},
@@ -72,7 +98,7 @@ func TestValidateToken(t *testing.T) {
 		},
 	}
 
-	v := opsgenie.NewValidator("valid")
+	v := gh.NewValidator("valid")
 
 	for _, c := range cases {
 		c := c
