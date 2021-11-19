@@ -14,13 +14,15 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+const schemaName = "watchops"
+
 func TestEventDataRepository_Add(t *testing.T) {
 	ctx := context.Background()
 
 	db, mock := newDBMock()
 	defer db.Close()
 
-	writer := NewEventDataWriter(db)
+	writer := NewEventDataWriter(db, schemaName)
 
 	e := provider.Event{
 		ID:          "event-id",
@@ -48,7 +50,7 @@ func TestEventDataRepository_Add_Failure(t *testing.T) {
 	db, mock := newDBMock()
 	defer db.Close()
 
-	writer := NewEventDataWriter(db)
+	writer := NewEventDataWriter(db, schemaName)
 
 	e := provider.Event{
 		ID:          "event-id",

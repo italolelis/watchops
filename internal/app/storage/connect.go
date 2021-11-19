@@ -23,6 +23,7 @@ type Config struct {
 	MaxIdleConns    int
 	ConnMaxLifetime time.Duration
 	Timeout         time.Duration
+	SchemaName      string
 }
 
 // Connect creates a new connection to the database. It returns a provider Writer based
@@ -39,7 +40,7 @@ func Connect(ctx context.Context, cfg Config) (provider.Writer, error) {
 		db.SetMaxIdleConns(cfg.MaxIdleConns)
 		db.SetConnMaxLifetime(cfg.ConnMaxLifetime)
 
-		return postgres.NewEventDataWriter(db), nil
+		return postgres.NewEventDataWriter(db, cfg.SchemaName), nil
 	case "redshift":
 		db, err := sql.Open("postgres", cfg.DSN)
 		if err != nil {
@@ -50,7 +51,7 @@ func Connect(ctx context.Context, cfg Config) (provider.Writer, error) {
 		db.SetMaxIdleConns(cfg.MaxIdleConns)
 		db.SetConnMaxLifetime(cfg.ConnMaxLifetime)
 
-		return redshift.NewEventDataWriter(db), nil
+		return redshift.NewEventDataWriter(db, cfg.SchemaName), nil
 	default:
 		return nil, ErrInvalidDataSource
 	}

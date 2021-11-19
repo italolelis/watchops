@@ -23,6 +23,7 @@ type config struct {
 		MaxIdleConns    int           `split_words:"true" default:"5"`
 		ConnMaxLifetime time.Duration `split_words:"true" default:"1h"`
 		Timeout         time.Duration `required:"true" default:"30s"`
+		SchemaName      string        `split_words:"true" default:"watchops"`
 	}
 	MessageBroker struct {
 		Driver  string `required:"true"`
