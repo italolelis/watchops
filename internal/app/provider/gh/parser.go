@@ -94,7 +94,7 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 		event.ID = strconv.FormatInt(e.GetCheckSuite().GetID(), 10)
 	case *github.StatusEvent:
 		event.TimeCreated = e.GetUpdatedAt().Time
-		event.ID = strconv.FormatInt(e.GetID(), 2)
+		event.ID = strconv.FormatInt(e.GetID(), 10)
 	case *github.ReleaseEvent:
 		if !e.GetRelease().GetCreatedAt().Time.IsZero() {
 			event.TimeCreated = e.GetRelease().GetCreatedAt().Time
