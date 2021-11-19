@@ -13,6 +13,7 @@ data:
   REST_READ_TIMEOUT: {{ .config.rest.readTimeout | quote }}
   REST_WRITE_TIMEOUT: {{ .config.rest.writeTimeout | quote }}
   REST_IDLE_TIMEOUT: {{ .config.rest.idleTimeout | quote }}
+  MESSAGE_BROKER_DRIVER: {{ .config.messageBroker.driver | quote }}
   TOPIC_PREFIX: {{ .config.messageBroker.topicPrefix | quote }}
   SINGLE_TOPIC: {{ .config.messageBroker.singleTopic | quote }}
 {{- end }}
