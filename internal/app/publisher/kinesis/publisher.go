@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/aws/retry"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
 )
@@ -17,13 +18,16 @@ var (
 )
 
 type SessionConfig struct {
-	Endpoint string
-	Region   string
+	Endpoint   string
+	Region     string
+	Timeout    time.Duration `default:"5s"`
+	MaxRetries int           `split_words:"true" default:"3"`
 }
 
 // Publisher holds the kinesis connection and the stream name.
 type Publisher struct {
 	kinesis *kinesis.Client
+	timeout time.Duration
 }
 
 // NewPublisher creates a new kinesis connection.
@@ -44,6 +48,9 @@ func NewPublisher(ctx context.Context, cfg SessionConfig) (*Publisher, error) {
 		ctx,
 		config.WithRegion(cfg.Region),
 		config.WithEndpointResolver(resolver),
+		config.WithRetryer(func() aws.Retryer {
+			return retry.AddWithMaxAttempts(retry.NewStandard(), cfg.MaxRetries)
+		}),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load aws config: %w", err)
@@ -51,12 +58,16 @@ func NewPublisher(ctx context.Context, cfg SessionConfig) (*Publisher, error) {
 
 	return &Publisher{
 		kinesis: kinesis.NewFromConfig(awsCfg),
+		timeout: cfg.Timeout,
 	}, nil
 }
 
 // Publish publish the data to the correct stream.
 //nolint: exhaustivestruct
 func (p *Publisher) Publish(ctx context.Context, streamName string, data []byte) error {
+	ctx, cancel := context.WithTimeout(ctx, p.timeout)
+	defer cancel()
+
 	_, err := p.kinesis.PutRecord(ctx, &kinesis.PutRecordInput{
 		Data:         data,
 		StreamName:   &streamName,

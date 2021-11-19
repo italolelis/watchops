@@ -103,6 +103,11 @@ publisher:
       singleTopic: false
       # -- If you defined multiple topics (one for each incoming webhook type), then you can define the prefix of these topics.
       topicPrefix: "watchops_"
+      kinesis:
+        # -- Defines the timeout to call kinesis.
+        timeout: 5s
+        # -- Defines the number of HTTP retries in case a kinesis request fails.
+        maxRetries: 3
 
 subscribers:
   github:
@@ -140,10 +145,15 @@ subscribers:
       messageBroker:
         # -- Defines which message broker to use. You can choose between kinesis or awslambda (which is also based on kinesis).
         driver: "kinesis"
-        # -- Sets the name of the stream this subscriber will listen to. If you are using a single stream for all webhook types, then just define the name of that stream.
-        streamName: "watchops_github"
-        # -- When using AWS Kinesis, you need to set the AWS region.
-        region: "eu-central-1"
+        kinesis:
+          # -- Defines the timeout to call kinesis.
+          timeout: 5s
+          # -- Defines the number of HTTP retries in case a kinesis request fails.
+          maxRetries: 3
+          # -- Sets the name of the stream this subscriber will listen to. If you are using a single stream for all webhook types, then just define the name of that stream.
+          streamName: "watchops_github"
+          # -- When using AWS Kinesis, you need to set the AWS region.
+          region: "eu-central-1"
         store:
           # -- The message broker storage that holds the last read record from the broker. You can choose between memory, postgres, mysql, or redis. I do not recommend using the memory store in production.
           driver: "memory"

@@ -13,8 +13,10 @@ data:
   DATABASE_DRIVER: {{ .config.database.driver | quote }}
   DATABASE_SCHEMA_NAME: {{ .config.database.schemaName | quote }}
   MESSAGE_BROKER_DRIVER: {{ .config.messageBroker.driver | quote }}
-  MESSAGE_BROKER_KINESIS_STREAM_NAME: {{ .config.messageBroker.streamName | quote }}
-  MESSAGE_BROKER_KINESIS_REGION: {{ .config.messageBroker.region | quote }}
+  MESSAGE_BROKER_KINESIS_STREAM_NAME: {{ .config.messageBroker.kinesis.streamName | quote }}
+  MESSAGE_BROKER_KINESIS_REGION: {{ .config.messageBroker.kinesis.region | quote }}
+  MESSAGE_BROKER_KINESIS_TIMEOUT: {{ .config.messageBroker.kinesis.timeout | default "5s" | quote }}
+  MESSAGE_BROKER_KINESIS_MAX_RETRIES: {{ .config.messageBroker.kinesis.maxRetries | default "3" | quote }}
   MESSAGE_BROKER_KINESIS_STORE_DRIVER: {{ .config.messageBroker.store.driver | quote }}
   MESSAGE_BROKER_KINESIS_STORE_APP_NAME: {{ .config.messageBroker.store.appName | quote }}
   {{- if eq .config.messageBroker.store.driver "postgres" }}

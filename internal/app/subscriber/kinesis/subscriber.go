@@ -6,8 +6,10 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/aws/retry"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
 	consumer "github.com/harlow/kinesis-consumer"
@@ -24,11 +26,14 @@ type SessionConfig struct {
 	Region     string `required:"true"`
 	StreamName string `split_words:"true" default:"watchops"`
 	Store      StoreConfig
+	Timeout    time.Duration `default:"5s"`
+	MaxRetries int           `split_words:"true" default:"3"`
 }
 
 // Subscriber is the kinesis subscriber.
 type Subscriber struct {
 	consumer *consumer.Consumer
+	timeout  time.Duration
 }
 
 // NewSubscriber creates a new instance of Subscriber.
@@ -51,6 +56,9 @@ func NewSubscriber(ctx context.Context, cfg SessionConfig) (*Subscriber, error) 
 		ctx,
 		config.WithRegion(cfg.Region),
 		config.WithEndpointResolver(resolver),
+		config.WithRetryer(func() aws.Retryer {
+			return retry.AddWithMaxAttempts(retry.NewStandard(), cfg.MaxRetries)
+		}),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load aws config: %w", err)
@@ -73,6 +81,7 @@ func NewSubscriber(ctx context.Context, cfg SessionConfig) (*Subscriber, error) 
 
 	return &Subscriber{
 		consumer: c,
+		timeout:  cfg.Timeout,
 	}, nil
 }
 
@@ -80,6 +89,9 @@ func NewSubscriber(ctx context.Context, cfg SessionConfig) (*Subscriber, error) 
 //nolint: exhaustivestruct
 func (s *Subscriber) Subscribe(ctx context.Context, fn func(ctx context.Context, payload []byte, headers map[string][]string) error) error {
 	logger := log.WithContext(ctx).Named("kinesis_subscriber")
+
+	ctx, cancel := context.WithTimeout(ctx, s.timeout)
+	defer cancel()
 
 	logger.Info("processing messages...")
 	return s.consumer.Scan(ctx, func(r *consumer.Record) error {
