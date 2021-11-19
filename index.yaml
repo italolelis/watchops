@@ -93,6 +93,28 @@ entries:
   watchops:
   - apiVersion: v2
     appVersion: v1.0.0
+    created: "2021-11-19T13:43:33.567305555Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.x.x
+    description: 'This repository implements the four key metrics coined by Google
+      and introduced in Accelerate: Time to Restore, Lead Time to Change, Deployment
+      Frequency, and Change Failure Rate.'
+    digest: 8822d181548e47a6acfaef4336e46b07a6aa3a24d4ba80acbcc414c4afa0f8e3
+    maintainers:
+    - email: me@italovietro.com
+      name: italolelis
+    name: watchops
+    sources:
+    - https://github.com/italolelis/watchops
+    type: application
+    urls:
+    - https://github.com/italolelis/watchops/releases/download/watchops-1.4.2/watchops-1.4.2.tgz
+    version: 1.4.2
+  - apiVersion: v2
+    appVersion: v1.0.0
     created: "2021-11-19T13:25:28.422201919Z"
     dependencies:
     - condition: postgresql.enabled
@@ -191,4 +213,4 @@ entries:
     urls:
     - https://github.com/italolelis/fourkeys/releases/download/watchops-1.2.3/watchops-1.2.3.tgz
     version: 1.2.3
-generated: "2021-11-19T13:25:28.422501123Z"
+generated: "2021-11-19T13:43:33.567591557Z"
