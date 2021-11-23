@@ -1,1 +1,1 @@
-DROP VIEW deployments;
+DROP VIEW watchops.deployments;
