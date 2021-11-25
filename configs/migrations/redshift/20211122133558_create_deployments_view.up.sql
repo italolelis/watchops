@@ -1,4 +1,4 @@
-CREATE VIEW IF NOT EXISTS watchops.deployments AS 
+CREATE OR REPLACE VIEW watchops.deployments AS 
    WITH deploys AS (
       SELECT 
       source,
