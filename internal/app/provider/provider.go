@@ -42,3 +42,27 @@ func GenerateSignature(value []byte) string {
 	hasher.Write(value)
 	return base64.URLEncoding.EncodeToString(hasher.Sum(nil))
 }
+
+// ParserRegistry is a registry of parsers.
+type ParserRegistry struct {
+	parsers map[string]Parser
+}
+
+// NewParserRegistry creates a new parser registry.
+func NewParserRegistry() *ParserRegistry {
+	return &ParserRegistry{
+		parsers: make(map[string]Parser),
+	}
+}
+
+// Get returns the parser for the given name.
+func (pr *ParserRegistry) Get(name string) Parser {
+	return pr.parsers[name]
+}
+
+// Register registers a parser.
+func (pr *ParserRegistry) Register(parser Parser) *ParserRegistry {
+	pr.parsers[parser.GetName()] = parser
+
+	return pr
+}
