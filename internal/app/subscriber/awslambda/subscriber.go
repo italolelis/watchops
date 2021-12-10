@@ -45,6 +45,7 @@ func (s *Subscriber) lambdaHandler(fn handlerFunc) func(context.Context, events.
 			}
 
 			messageContainer.Headers["msg_id"] = append(messageContainer.Headers["msg_id"], record.EventID)
+			messageContainer.Headers["source"] = append(messageContainer.Headers["source"], messageContainer.Source)
 
 			if err := fn(ctx, messageContainer.Payload, messageContainer.Headers); err != nil {
 				logger.Errorw("failed to process event", "err", err)

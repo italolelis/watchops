@@ -90,8 +90,8 @@ func NewSubscriber(ctx context.Context, cfg SessionConfig) (*Subscriber, error) 
 func (s *Subscriber) Subscribe(ctx context.Context, fn func(ctx context.Context, payload []byte, headers map[string][]string) error) error {
 	logger := log.WithContext(ctx).Named("kinesis_subscriber")
 
-	ctx, cancel := context.WithTimeout(ctx, s.timeout)
-	defer cancel()
+	// ctx, cancel := context.WithTimeout(ctx, s.timeout)
+	// defer cancel()
 
 	logger.Info("processing messages...")
 	return s.consumer.Scan(ctx, func(r *consumer.Record) error {
@@ -106,6 +106,7 @@ func (s *Subscriber) Subscribe(ctx context.Context, fn func(ctx context.Context,
 
 		arrivalTime := *r.ApproximateArrivalTimestamp
 		messageContainer.Headers["publish_time"] = append(messageContainer.Headers["publish_time"], strconv.FormatInt(arrivalTime.Unix(), 10))
+		messageContainer.Headers["source"] = append(messageContainer.Headers["source"], messageContainer.Source)
 
 		if err := fn(ctx, messageContainer.Payload, messageContainer.Headers); err != nil {
 			logger.Errorw("failed to process event", "err", err)
