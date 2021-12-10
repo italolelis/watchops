@@ -5,7 +5,10 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/italolelis/watchops/internal/app/provider"
 	"github.com/italolelis/watchops/internal/app/provider/gh"
+	"github.com/italolelis/watchops/internal/app/provider/gitlab"
+	"github.com/italolelis/watchops/internal/app/provider/opsgenie"
 	"github.com/italolelis/watchops/internal/app/storage"
 	"github.com/italolelis/watchops/internal/app/stream"
 	"github.com/italolelis/watchops/internal/app/subscriber"
@@ -72,6 +75,13 @@ func run(ctx context.Context) error {
 		return fmt.Errorf("failed to build subscriber: %w", err)
 	}
 
-	events := stream.NewEventDataHandler(db, &gh.Parser{})
+	pr := provider.NewParserRegistry()
+	pr.
+		Register(&gh.Parser{}).
+		Register(&opsgenie.Parser{}).
+		Register(&gh.Parser{}).
+		Register(&gitlab.Parser{})
+
+	events := stream.NewEventDataHandler(db, pr)
 	return subs.Subscribe(ctx, events.Handle)
 }

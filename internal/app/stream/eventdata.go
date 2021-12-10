@@ -10,8 +10,8 @@ import (
 type (
 	// EventDataHandler is a handler for event data.
 	EventDataHandler struct {
-		w provider.Writer
-		p provider.Parser
+		w  provider.Writer
+		pr *provider.ParserRegistry
 	}
 
 	// Handler is the interface that must be implemented by the handler.
@@ -19,13 +19,19 @@ type (
 )
 
 // NewEventDataHandler create a new handler for event data.
-func NewEventDataHandler(w provider.Writer, p provider.Parser) *EventDataHandler {
-	return &EventDataHandler{w: w, p: p}
+func NewEventDataHandler(w provider.Writer, pr *provider.ParserRegistry) *EventDataHandler {
+	return &EventDataHandler{w: w, pr: pr}
 }
 
 // Handle handles all events that come.
 func (h *EventDataHandler) Handle(ctx context.Context, payload []byte, headers map[string][]string) error {
-	eventData, err := h.p.Parse(headers, payload)
+	source := headers["source"]
+	if len(source) == 0 {
+		return fmt.Errorf("source header is required")
+	}
+
+	p := h.pr.Get(source[0])
+	eventData, err := p.Parse(headers, payload)
 	if err != nil {
 		return fmt.Errorf("failed to parse payload from webhook: %w", err)
 	}
