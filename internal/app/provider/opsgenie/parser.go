@@ -15,8 +15,8 @@ const (
 type opsgenieEvent struct {
 	Action string `json:"action"`
 	Alert  struct {
-		ID        string    `json:"alertId"`
-		UpdatedAt time.Time `json:"updatedAt"`
+		ID        string `json:"alertId"`
+		UpdatedAt int64  `json:"updatedAt"`
 	} `json:"alert"`
 	EscalationID  string    `json:"escalationId"`
 	EsclationTime time.Time `json:"escalationTime"`
@@ -62,7 +62,7 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 	case "UpdateDescription":
 	case "UpdateMessage":
 		event.ID = e.Alert.ID
-		event.TimeCreated = e.Alert.UpdatedAt
+		event.TimeCreated = time.Unix(e.Alert.UpdatedAt, 0)
 	case "Escalate":
 		event.ID = e.EscalationID
 		event.TimeCreated = e.EsclationTime
