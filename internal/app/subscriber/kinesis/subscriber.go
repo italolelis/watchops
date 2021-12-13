@@ -15,6 +15,7 @@ import (
 	consumer "github.com/harlow/kinesis-consumer"
 	"github.com/italolelis/watchops/internal/app/wh"
 	"github.com/italolelis/watchops/internal/pkg/log"
+	"github.com/italolelis/watchops/internal/pkg/signal"
 )
 
 var (
@@ -74,6 +75,7 @@ func NewSubscriber(ctx context.Context, cfg SessionConfig) (*Subscriber, error) 
 		cfg.StreamName,
 		consumer.WithClient(kinesis.NewFromConfig(awsCfg)),
 		consumer.WithStore(store),
+		consumer.WithLogger(&LoggerAdapter{logger}),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create subscriber: %w", err)
@@ -90,8 +92,13 @@ func NewSubscriber(ctx context.Context, cfg SessionConfig) (*Subscriber, error) 
 func (s *Subscriber) Subscribe(ctx context.Context, fn func(ctx context.Context, payload []byte, headers map[string][]string) error) error {
 	logger := log.WithContext(ctx).Named("kinesis_subscriber")
 
-	// ctx, cancel := context.WithTimeout(ctx, s.timeout)
-	// defer cancel()
+	ctx, cancel := context.WithCancel(ctx)
+
+	done := signal.New(ctx)
+	go func() {
+		<-done.Done()
+		cancel()
+	}()
 
 	logger.Info("processing messages...")
 	return s.consumer.Scan(ctx, func(r *consumer.Record) error {
