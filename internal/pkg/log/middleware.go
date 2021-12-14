@@ -28,6 +28,8 @@ type StructuredLogger struct {
 
 func (l *StructuredLogger) NewLogEntry(r *http.Request) middleware.LogEntry {
 	traceID := sanitize(r.Header.Get(TraceIDHeader))
+	referer := sanitize(r.Referer())
+	userAgent := sanitize(r.UserAgent())
 
 	// adds the trace id into the request context.
 	ctx := context.WithValue(r.Context(), traceIDKey, traceID)
@@ -39,8 +41,8 @@ func (l *StructuredLogger) NewLogEntry(r *http.Request) middleware.LogEntry {
 		"host", r.Host,
 		"request", r.RequestURI,
 		"remote-addr", r.RemoteAddr,
-		"referer", sanitize(r.Referer()),
-		"user-agent", sanitize(r.UserAgent()),
+		"referer", referer,
+		"user-agent", userAgent,
 	)
 
 	logger.Info("request started")
