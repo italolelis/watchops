@@ -46,21 +46,21 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 	}
 
 	switch e.Action {
-	case "Create":
-	case "Acknowledge":
-	case "UnAcknowledge":
-	case "AddTeam":
-	case "AddRecipient":
-	case "AddNote":
-	case "AddTags":
-	case "RemoveTags":
-	case "Close":
-	case "AssignOwnership":
-	case "TakeOwnership":
-	case "Delete":
-	case "UpdatePriority":
-	case "UpdateDescription":
-	case "UpdateMessage":
+	case "Create",
+		"Acknowledge",
+		"UnAcknowledge",
+		"AddTeam",
+		"AddRecipient",
+		"AddNote",
+		"AddTags",
+		"RemoveTags",
+		"Close",
+		"AssignOwnership",
+		"TakeOwnership",
+		"Delete",
+		"UpdatePriority",
+		"UpdateDescription",
+		"UpdateMessage":
 		event.ID = e.Alert.ID
 		event.TimeCreated = time.Unix(e.Alert.UpdatedAt, 0)
 	case "Escalate":

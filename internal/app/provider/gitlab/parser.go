@@ -83,8 +83,8 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 	}
 
 	switch e.ObjectKind {
-	case "push":
-	case "tag_push":
+	case "push",
+		"tag_push":
 		event.ID = e.CheckoutSHA
 		for _, c := range e.Commits {
 			if c.ID == event.ID {
@@ -97,10 +97,10 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 			}
 		}
 
-	case "merge_request":
-	case "note":
-	case "issue":
-	case "pipeline":
+	case "merge_request",
+		"note",
+		"issue",
+		"pipeline":
 		event.ID = e.ObjectAttributes.ID
 		event.TimeCreated = e.ObjectAttributes.Time()
 
