@@ -43,8 +43,8 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 	}
 
 	switch event.EventType {
-	case "workflow-completed":
-	case "job-completed":
+	case "workflow-completed",
+		"job-completed":
 		event.ID = e.ID
 		event.TimeCreated = e.HappenedAt
 	default:
