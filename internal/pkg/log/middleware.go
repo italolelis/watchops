@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/go-chi/chi/middleware"
@@ -26,7 +27,7 @@ type StructuredLogger struct {
 }
 
 func (l *StructuredLogger) NewLogEntry(r *http.Request) middleware.LogEntry {
-	traceID := r.Header.Get(TraceIDHeader)
+	traceID := sanitize(r.Header.Get(TraceIDHeader))
 
 	// adds the trace id into the request context.
 	ctx := context.WithValue(r.Context(), traceIDKey, traceID)
@@ -38,8 +39,8 @@ func (l *StructuredLogger) NewLogEntry(r *http.Request) middleware.LogEntry {
 		"host", r.Host,
 		"request", r.RequestURI,
 		"remote-addr", r.RemoteAddr,
-		"referer", r.Referer(),
-		"user-agent", r.UserAgent(),
+		"referer", sanitize(r.Referer()),
+		"user-agent", sanitize(r.UserAgent()),
 	)
 
 	logger.Info("request started")
@@ -65,4 +66,10 @@ func (l *StructuredLoggerEntry) Panic(v interface{}, stack []byte) {
 		Key:    "panic",
 		String: fmt.Sprintf("%+v", v),
 	})
+}
+
+func sanitize(s string) string {
+	s = strings.Replace(s, "\n", "", -1)
+
+	return strings.Replace(s, "\r", "", -1)
 }
