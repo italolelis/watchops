@@ -22,7 +22,7 @@ func TestParsePayload(t *testing.T) {
 			expectedObject: provider.Event{
 				ID:          "f3efa74b-29cc-4a4f-9bb7-804d7c1be544-1639476708514",
 				EventType:   "AddNote",
-				TimeCreated: time.Unix(1639521280284000000, 0),
+				TimeCreated: time.UnixMilli(1639521280284000000),
 				Signature:   "l1Q61kXRlCp_qTIudME8AfYmVtY=",
 				MsgID:       "testID",
 				Source:      "opsgenie",
