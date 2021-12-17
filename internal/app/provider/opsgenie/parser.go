@@ -18,8 +18,8 @@ type opsgenieEvent struct {
 		ID        string `json:"alertId"`
 		UpdatedAt int64  `json:"updatedAt"`
 	} `json:"alert"`
-	EscalationID  string    `json:"escalationId"`
-	EsclationTime time.Time `json:"escalationTime"`
+	EscalationID  string `json:"escalationId"`
+	EsclationTime int64  `json:"escalationTime"`
 }
 
 // Parser is the GitHub webhook parser.
@@ -62,10 +62,22 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 		"UpdateDescription",
 		"UpdateMessage":
 		event.ID = e.Alert.ID
-		event.TimeCreated = time.Unix(e.Alert.UpdatedAt, 0)
+
+		if e.Alert.UpdatedAt > 0 {
+			event.TimeCreated = time.Unix(e.Alert.UpdatedAt, 0)
+		} else {
+			event.TimeCreated = time.Now()
+		}
+
 	case "Escalate":
 		event.ID = e.EscalationID
-		event.TimeCreated = e.EsclationTime
+
+		if e.EsclationTime > 0 {
+			event.TimeCreated = time.Unix(e.EsclationTime, 0)
+		} else {
+			event.TimeCreated = time.Now()
+		}
+
 	default:
 		return provider.Event{}, fmt.Errorf("unsupported event type %s", e.Action)
 	}
