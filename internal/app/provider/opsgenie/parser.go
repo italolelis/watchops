@@ -64,7 +64,7 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 		event.ID = e.Alert.ID
 
 		if e.Alert.UpdatedAt > 0 {
-			event.TimeCreated = time.Unix(e.Alert.UpdatedAt, 0)
+			event.TimeCreated = time.UnixMilli(e.Alert.UpdatedAt)
 		} else {
 			event.TimeCreated = time.Now()
 		}
@@ -73,7 +73,7 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 		event.ID = e.EscalationID
 
 		if e.EsclationTime > 0 {
-			event.TimeCreated = time.Unix(e.EsclationTime, 0)
+			event.TimeCreated = time.UnixMilli(e.EsclationTime)
 		} else {
 			event.TimeCreated = time.Now()
 		}
