@@ -26,8 +26,8 @@ CREATE OR REPLACE VIEW watchops.incidents AS (
     SELECT
     source,
     incident_id,
-    MIN(time_created) as time_created,
-    MAX(time_resolved) as time_resolved
+    date_trunc('second',MIN(time_created)::timestamp) as time_created,
+    date_trunc('second',MAX(time_resolved)::timestamp) as time_resolved
     FROM issue
     WHERE bug = true 
     and time_resolved >= TO_DATE('1900-01-01', 'YYYY-MM-DD') --filter null time_resolved 
