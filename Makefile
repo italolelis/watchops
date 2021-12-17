@@ -26,6 +26,7 @@ compose:
 
 kinesis:
 	@echo "$(OK_COLOR)==> Creating Kinesis streams... $(NO_COLOR)"
+	@aws --endpoint-url http://127.0.0.1:4566 kinesis create-stream --stream-name watchops_all --shard-count 1
 	@aws --endpoint-url http://127.0.0.1:4566 kinesis create-stream --stream-name watchops_github --shard-count 1
 	@aws --endpoint-url http://127.0.0.1:4566 kinesis create-stream --stream-name watchops_opsgenie --shard-count 1
 
