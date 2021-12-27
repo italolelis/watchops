@@ -14,7 +14,7 @@ CREATE OR REPLACE VIEW watchops.incidents AS (
         end as time_created,
         CASE WHEN source LIKE 'github%' THEN TO_TIMESTAMP(json_extract_path_text(json_serialize(metadata), 'issue', 'closed_at'), 'YYYY-MM-DD HH24:MI:SS')
             WHEN source LIKE 'gitlab%' THEN TO_TIMESTAMP(json_extract_path_text(json_serialize(metadata), 'object_attributes', 'closed_at'), 'YYYY-MM-DD HH24:MI:SS') 
-            WHEN source LIKE 'opsgenie' THEN dateadd(ms, CAST(json_extract_path_text(json_extract_path_text(json_serialize(metadata), 'alert'), 'updatedAt') AS bigint)/1000000, '1970-01-01')
+            WHEN source LIKE 'opsgenie' THEN dateadd(ms, CAST(json_extract_path_text(json_extract_path_text(json_serialize(metadata), 'alert'), 'updatedAt') AS bigint), '1970-01-01')
         end as time_resolved,
         regexp_substr(json_serialize(metadata), '(?<=root cause: )(.*?)(?=\")', 1, 1,'p') as root_cause,
         CASE WHEN source LIKE 'github%' THEN json_extract_path_text(json_serialize(metadata), 'issue', 'labels') like '%bug%'
