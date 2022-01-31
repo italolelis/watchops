@@ -1,41 +1,34 @@
-WITH last_three_months AS
-(SELECT
-TIMESTAMP(day) AS day
+WITH last_three_months AS (
+SELECT (dateadd(month,-3,GETDATE())+ n)::date as day
+from watchops.dates 
+where day <=  GETDATE()
+), 
+deployments AS 
+(
+SELECT
+TRUNC(time_created) AS day,
+deploy_id
 FROM
-UNNEST(
-    GENERATE_DATE_ARRAY(
-        DATE_SUB(CURRENT_DATE(), INTERVAL 3 MONTH), CURRENT_DATE(),
-    INTERVAL 1 DAY)) AS day
--- FROM the start of the data
-WHERE day > (SELECT date(min(time_created)) FROM four_keys.events_raw)
+watchops.deployments
 )
 SELECT
-CASE WHEN daily THEN \"Daily\" 
-     WHEN weekly THEN \"Weekly\" 
-      # If at least one per month, then Monthly
-     WHEN PERCENTILE_CONT(monthly_deploys, 0.5) OVER () >= 1 THEN  \"Monthly\" 
-     ELSE \"Yearly\"
+CASE WHEN daily THEN 'Daily' 
+     WHEN weekly THEN 'Weekly' 
+     WHEN PERCENTILE_CONT(0.5) within group (order by monthly_deploys) OVER () >= 1 THEN  'Monthly' 
+     ELSE 'Yearly'
      END as deployment_frequency
 FROM (
-      SELECT
-  -- If the median number of days per week is more than 3, then Daily
-  PERCENTILE_CONT(days_deployed, 0.5) OVER() >= 3 AS daily,
-  -- If most weeks have a deployment, then Weekly
-  PERCENTILE_CONT(week_deployed, 0.5) OVER() >= 1 AS weekly,
-  -- Count the number of deployments per month.  
-  -- Cannot mix aggregate and analytic functions, so calculate the median in the outer select statement
-  SUM(week_deployed) OVER(partition by TIMESTAMP_TRUNC(week, MONTH)) monthly_deploys
+  SELECT
+  PERCENTILE_CONT(0.5) within group (order by days_deployed) OVER() >= 3 AS daily,
+  PERCENTILE_CONT(0.5) within group (order by week_deployed) OVER() >= 1 AS weekly,
+  SUM(week_deployed) OVER(partition by date_trunc('month', week)) monthly_deploys
   FROM(
-          SELECT
-      TIMESTAMP_TRUNC(last_three_months.day, WEEK) as week,
-      MAX(if(deployments.day is not null, 1, 0)) as week_deployed,
+      SELECT
+      DATE_TRUNC('week', last_three_months.day) as week,
+      MAX(CASE WHEN deployments.day is not null THEN 1 ELSE 0 END) as week_deployed,
       COUNT(distinct deployments.day) as days_deployed
-      FROM last_three_months
-      LEFT JOIN(
-            SELECT
-        TIMESTAMP_TRUNC(time_created, DAY) AS day,
-        deploy_id
-        FROM four_keys.deployments) deployments ON deployments.day = last_three_months.day
+	FROM last_three_months, deployments
+	WHERE deployments.day = last_three_months.day
       GROUP BY week)
  )
-LIMIT 1
+LIMIT 1;  

@@ -1,7 +1,6 @@
 SELECT
-TIMESTAMP_TRUNC(time_created, DAY) AS day,
+TRUNC(time_created) AS day,
 COUNT(distinct deploy_id) AS deployments
 FROM
-four_keys.deployments
-GROUP BY day
-ORDER BY day
+watchops.deployments
+GROUP BY day;
