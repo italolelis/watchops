@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/aws/aws-lambda-go v1.27.1
-	github.com/go-chi/chi v1.5.4
+	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/heptiolabs/healthcheck v0.0.0-20180807145615-6ff867650f40
 	github.com/kelseyhightower/envconfig v1.4.0
