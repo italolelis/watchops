@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Lint Code Base
         uses: docker://github/super-linter:v4
@@ -32,7 +32,7 @@ jobs:
         go-version: 1.17.x
         
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - uses: actions/cache@v2
       with:
