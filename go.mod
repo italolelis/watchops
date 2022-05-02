@@ -9,7 +9,7 @@ require (
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/heptiolabs/healthcheck v0.0.0-20180807145615-6ff867650f40
 	github.com/kelseyhightower/envconfig v1.4.0
-	github.com/lib/pq v1.10.4
+	github.com/lib/pq v1.10.5
 	github.com/stretchr/testify v1.7.0
 	go.uber.org/zap v1.19.1
 )
