@@ -54,7 +54,7 @@ jobs:
 
     - name: Docker meta
       id: meta
-      uses: docker/metadata-action@v3
+      uses: docker/metadata-action@v4
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
         flavor: |
@@ -67,7 +67,7 @@ jobs:
 
     - name: Docker subscriber meta
       id: subscriber_meta
-      uses: docker/metadata-action@v3
+      uses: docker/metadata-action@v4
       with:
         images: ${{ env.REGISTRY }}/${{ env.SUBSCRIBER_IMAGE_NAME }}
         flavor: |
