@@ -2,7 +2,6 @@ package bigquery
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"time"
 
@@ -24,7 +23,7 @@ type (
 	bqEvent struct {
 		EventType   string
 		ID          string
-		Metadata    json.RawMessage
+		Metadata    string
 		TimeCreated time.Time
 		Signature   string
 		MsgID       string
@@ -58,7 +57,15 @@ func NewEventDataWriter(ctx context.Context, projectID string) (*EventDataWriter
 func (w *EventDataWriter) Add(ctx context.Context, eventData provider.Event) error {
 	inserter := w.client.Dataset(datasetID).Table(tableID).Inserter()
 
-	return inserter.Put(ctx, bqEvent(eventData))
+	return inserter.Put(ctx, &bqEvent{
+		EventType:   eventData.EventType,
+		ID:          eventData.ID,
+		Metadata:    string(eventData.Metadata),
+		TimeCreated: eventData.TimeCreated,
+		Signature:   eventData.Signature,
+		MsgID:       eventData.MsgID,
+		Source:      eventData.Source,
+	})
 }
 
 // Closes the connection to the database.
