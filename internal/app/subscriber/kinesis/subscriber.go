@@ -24,7 +24,7 @@ var (
 
 type SessionConfig struct {
 	Endpoint   string
-	Region     string `required:"true"`
+	Region     string
 	StreamName string `split_words:"true" default:"watchops"`
 	Store      StoreConfig
 	Timeout    time.Duration `default:"5s"`
