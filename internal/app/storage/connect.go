@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/italolelis/watchops/internal/app/provider"
+	"github.com/italolelis/watchops/internal/app/storage/bigquery"
 	"github.com/italolelis/watchops/internal/app/storage/postgres"
 	"github.com/italolelis/watchops/internal/app/storage/redshift"
 	_ "github.com/lib/pq"
@@ -24,6 +25,10 @@ type Config struct {
 	ConnMaxLifetime time.Duration
 	Timeout         time.Duration
 	SchemaName      string
+
+	Bigquery struct {
+		ProjectID string
+	}
 }
 
 // Connect creates a new connection to the database. It returns a provider Writer based
@@ -52,6 +57,8 @@ func Connect(ctx context.Context, cfg Config) (provider.Writer, error) {
 		db.SetConnMaxLifetime(cfg.ConnMaxLifetime)
 
 		return redshift.NewEventDataWriter(db, cfg.SchemaName), nil
+	case "bigquery":
+		return bigquery.NewEventDataWriter(ctx, cfg.Bigquery.ProjectID)
 	default:
 		return nil, ErrInvalidDataSource
 	}
