@@ -81,10 +81,11 @@ func run(ctx context.Context) error {
 	// =============================================
 	slog.Infow("building publisher", "driver", cfg.MessageBroker.Driver)
 
-	p, err := publisher.Build(ctx, cfg.MessageBroker)
+	p, err, shutdown := publisher.Build(ctx, cfg.MessageBroker)
 	if err != nil {
 		return fmt.Errorf("failed to create a new publisher: %w", err)
 	}
+	defer shutdown()
 
 	// =========================================================================
 	// App Starting

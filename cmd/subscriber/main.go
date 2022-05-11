@@ -12,7 +12,6 @@ import (
 	"github.com/italolelis/watchops/internal/app/storage"
 	"github.com/italolelis/watchops/internal/app/stream"
 	"github.com/italolelis/watchops/internal/app/subscriber"
-	"github.com/italolelis/watchops/internal/app/subscriber/kinesis"
 	"github.com/italolelis/watchops/internal/pkg/log"
 	"github.com/kelseyhightower/envconfig"
 )
@@ -20,18 +19,19 @@ import (
 type config struct {
 	LogLevel string `split_words:"true" default:"info"`
 	Database struct {
-		Driver          string        `default:"postgres"`
-		DSN             string        `required:"true"`
+		Driver          string `default:"postgres"`
+		DSN             string
 		MaxOpenConns    int           `split_words:"true" default:"30"`
 		MaxIdleConns    int           `split_words:"true" default:"5"`
 		ConnMaxLifetime time.Duration `split_words:"true" default:"1h"`
 		Timeout         time.Duration `required:"true" default:"30s"`
 		SchemaName      string        `split_words:"true" default:"watchops"`
+
+		Bigquery struct {
+			ProjectID string `split_words:"true"`
+		}
 	}
-	MessageBroker struct {
-		Driver  string `required:"true"`
-		Kinesis kinesis.SessionConfig
-	} `split_words:"true"`
+	MessageBroker subscriber.Config `split_words:"true"`
 }
 
 func main() {
@@ -70,10 +70,11 @@ func run(ctx context.Context) error {
 	defer db.Close()
 
 	logger.Debugw("creating subscriber", "driver", cfg.MessageBroker.Driver)
-	subs, err := subscriber.Build(ctx, "kinesis", subscriber.Config(cfg.MessageBroker))
+	subs, err, shutdown := subscriber.Build(ctx, cfg.MessageBroker.Driver, subscriber.Config(cfg.MessageBroker))
 	if err != nil {
 		return fmt.Errorf("failed to build subscriber: %w", err)
 	}
+	defer shutdown()
 
 	pr := provider.NewParserRegistry()
 	pr.
