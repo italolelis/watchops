@@ -91,6 +91,7 @@ func (s *Subscriber) Subscribe(ctx context.Context, fn func(ctx context.Context,
 			return
 		}
 
+		msg.Ack()
 		logger.Debug("finished processing incoming message")
 	})
 }
