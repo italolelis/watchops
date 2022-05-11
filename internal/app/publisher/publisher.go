@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/italolelis/watchops/internal/app/publisher/kinesis"
+	"github.com/italolelis/watchops/internal/app/publisher/pubsub"
 )
 
 type (
@@ -17,14 +18,18 @@ type (
 	Config struct {
 		Driver  string `required:"true"`
 		Kinesis kinesis.SessionConfig
+		Pubsub  pubsub.SessionConfig
 	}
 )
 
-func Build(ctx context.Context, cfg Config) (Publisher, error) {
+func Build(ctx context.Context, cfg Config) (Publisher, error, func() error) {
 	switch cfg.Driver {
 	case "kinesis":
-		return kinesis.NewPublisher(ctx, cfg.Kinesis)
+		p, err := kinesis.NewPublisher(ctx, cfg.Kinesis)
+		return p, err, func() error { return nil }
+	case "pubsub":
+		return pubsub.NewPublisher(ctx, cfg.Pubsub)
 	default:
-		return nil, errors.New("driver not supported. Please use one of the supported ones: kinesis")
+		return nil, errors.New("driver not supported. Please use one of the supported ones: kinesis, pubsub"), nil
 	}
 }
