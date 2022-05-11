@@ -6,6 +6,7 @@ import (
 
 	"github.com/italolelis/watchops/internal/app/subscriber/awslambda"
 	"github.com/italolelis/watchops/internal/app/subscriber/kinesis"
+	"github.com/italolelis/watchops/internal/app/subscriber/pubsub"
 )
 
 type (
@@ -18,16 +19,21 @@ type (
 	Config struct {
 		Driver  string
 		Kinesis kinesis.SessionConfig
+		Pubsub  pubsub.SessionConfig
 	}
 )
 
-func Build(ctx context.Context, driver string, cfg Config) (Subscriber, error) {
+func Build(ctx context.Context, driver string, cfg Config) (Subscriber, error, func() error) {
 	switch driver {
 	case "awslambda":
-		return awslambda.NewSubscriber(ctx)
+		s, err := awslambda.NewSubscriber(ctx)
+		return s, err, func() error { return nil }
 	case "kinesis":
-		return kinesis.NewSubscriber(ctx, cfg.Kinesis)
+		s, err := kinesis.NewSubscriber(ctx, cfg.Kinesis)
+		return s, err, func() error { return nil }
+	case "pubsub":
+		return pubsub.NewSubscriber(ctx, cfg.Pubsub)
 	default:
-		return nil, errors.New("driver not supported. Please use one of the supported ones: awslambda, or kinesis")
+		return nil, errors.New("driver not supported. Please use one of the supported ones: awslambda, kinesis, and pubsub"), func() error { return nil }
 	}
 }
