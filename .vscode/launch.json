@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Publisher",
+            "name": "Publisher Kinesis",
             "type": "go",
             "request": "launch",
             "mode": "auto",
@@ -22,7 +22,25 @@
             "args": []
         },
         {
-            "name": "Github Subscriber",
+            "name": "Publisher PubSub",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/publisher",
+            "env": {
+                "LOG_LEVEL": "debug",
+                "GITHUB_WEBHOOK_SECRET": "K7MsnuXt8o3h2aUhUNHoZDxE5lSVR7M6",
+                "OPSGENIE_WEBHOOK_SECRET": "5yS5gKO7Ujc3UEklqPQNo86tBMmNAPmE",
+                "MESSAGE_BROKER_DRIVER": "pubsub",
+                "TOPIC_PREFIX": "watchops_all",
+                "SINGLE_TOPIC": "true",
+                "PUBSUB_EMULATOR_HOST": "0.0.0.0:8085",
+                "PUBSUB_PROJECT_ID": "watchops"
+            },
+            "args": []
+        },
+        {
+            "name": "Github Kinesis Subscriber",
             "type": "go",
             "request": "launch",
             "mode": "auto",
@@ -83,6 +101,24 @@
                 "MESSAGE_BROKER_KINESIS_STORE_POSTGRES_DSN": "postgres://watchops:qwerty123@localhost:5432/watchops-db?sslmode=disable",
             },
             "args": []
-        }
+        },
+        {
+            "name": "Github PubSub Subscriber",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/subscriber",
+            "env": {
+                "LOG_LEVEL": "debug",
+                "DATABASE_DRIVER": "bigquery",
+                "DATABASE_BIGQUERY_PROJECT_ID": "urbansportsclub-dev",
+                "MESSAGE_BROKER_DRIVER": "pubsub",
+                "PUBSUB_EMULATOR_HOST": "0.0.0.0:8085",
+                "PUBSUB_PROJECT_ID": "watchops",
+                "PUBSUB_SUBSCRIPTION": "watchops_all",
+                "GOOGLE_APPLICATION_CREDENTIALS": "/workspaces/watchops/.vscode/creds.json",
+            },
+            "args": []
+        },
     ]
 }
