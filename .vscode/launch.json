@@ -32,10 +32,10 @@
                 "GITHUB_WEBHOOK_SECRET": "K7MsnuXt8o3h2aUhUNHoZDxE5lSVR7M6",
                 "OPSGENIE_WEBHOOK_SECRET": "5yS5gKO7Ujc3UEklqPQNo86tBMmNAPmE",
                 "MESSAGE_BROKER_DRIVER": "pubsub",
-                "TOPIC_PREFIX": "watchops_all",
-                "SINGLE_TOPIC": "true",
+                "MESSAGE_BROKER_PUBSUB_PROJECT_ID": "urbansportsclub-dev",
+                "TOPIC_PREFIX": "watchops-",
+                "SINGLE_TOPIC": "false",
                 "PUBSUB_EMULATOR_HOST": "0.0.0.0:8085",
-                "PUBSUB_PROJECT_ID": "watchops"
             },
             "args": []
         },
@@ -113,10 +113,10 @@
                 "DATABASE_DRIVER": "bigquery",
                 "DATABASE_BIGQUERY_PROJECT_ID": "urbansportsclub-dev",
                 "MESSAGE_BROKER_DRIVER": "pubsub",
+                "MESSAGE_BROKER_PUBSUB_PROJECT_ID": "urbansportsclub-dev",
+                "MESSAGE_BROKER_PUBSUB_SUBSCRIPTION": "watchops-github",
                 "PUBSUB_EMULATOR_HOST": "0.0.0.0:8085",
-                "PUBSUB_PROJECT_ID": "watchops",
-                "PUBSUB_SUBSCRIPTION": "watchops_all",
-                "GOOGLE_APPLICATION_CREDENTIALS": "/workspaces/watchops/.vscode/creds.json",
+                "GOOGLE_APPLICATION_CREDENTIALS": "", // for bigquery you need a real GCP account.
             },
             "args": []
         },
