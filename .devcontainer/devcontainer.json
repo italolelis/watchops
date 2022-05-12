@@ -9,6 +9,7 @@
 			// Append -bullseye or -buster to pin to an OS version.
 			// Use -bullseye variants on local arm64/Apple Silicon.
 			"VARIANT": "1.18-bullseye",
+			"TERRAFORM_VERSION": "1.1.9",
 			// Options
 			"NODE_VERSION": "16"
 		}
@@ -24,7 +25,8 @@
 
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
-		"golang.Go"
+		"golang.Go",
+		"hashicorp.terraform"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
@@ -37,6 +39,11 @@
 	"remoteUser": "vscode",
 	"features": {
 		"docker-in-docker": "latest",
-		"git": "latest"
+		"git": "latest",
+		"kubectl-helm-minikube": {
+			"version": "latest",
+			"helm": "latest",
+			"minikube": "none"
+		}
 	}
 }
