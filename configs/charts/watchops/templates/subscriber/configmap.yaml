@@ -12,13 +12,22 @@ data:
   LOG_LEVEL: {{ .config.logLevel | quote }}
   DATABASE_DRIVER: {{ .config.database.driver | quote }}
   DATABASE_SCHEMA_NAME: {{ .config.database.schemaName | quote }}
+  {{- if eq .config.database.driver "bigquery" }}
+  DATABASE_BIGQUERY_PROJECT_ID: {{ .config.database.bigquery.projectID | quote }}
+  {{- end }}
   MESSAGE_BROKER_DRIVER: {{ .config.messageBroker.driver | quote }}
+  {{- if eq .config.messageBroker.driver "pubsub" }}
+  MESSAGE_BROKER_PUBSUB_PROJECT_ID: {{ .config.messageBroker.pubsub.projectID | quote }}
+  MESSAGE_BROKER_PUBSUB_SUBSCRIPTION: {{ .config.messageBroker.pubsub.subscription | quote }}
+  {{- end }}
+  {{- if eq .config.messageBroker.driver "kinesis" }}
   MESSAGE_BROKER_KINESIS_STREAM_NAME: {{ .config.messageBroker.kinesis.streamName | quote }}
   MESSAGE_BROKER_KINESIS_REGION: {{ .config.messageBroker.kinesis.region | quote }}
   MESSAGE_BROKER_KINESIS_TIMEOUT: {{ .config.messageBroker.kinesis.timeout | default "5s" | quote }}
   MESSAGE_BROKER_KINESIS_MAX_RETRIES: {{ .config.messageBroker.kinesis.maxRetries | default "3" | quote }}
   MESSAGE_BROKER_KINESIS_STORE_DRIVER: {{ .config.messageBroker.store.driver | quote }}
   MESSAGE_BROKER_KINESIS_STORE_APP_NAME: {{ .config.messageBroker.store.appName | quote }}
+  {{- end }}
   {{- if eq .config.messageBroker.store.driver "postgres" }}
   MESSAGE_BROKER_KINESIS_STORE_POSTGRES_TABLE_NAME: {{ .config.messageBroker.store.postgres.tableName | quote }}
   {{- end }}

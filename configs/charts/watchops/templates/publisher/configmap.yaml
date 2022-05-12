@@ -14,8 +14,14 @@ data:
   REST_WRITE_TIMEOUT: {{ .config.rest.writeTimeout | quote }}
   REST_IDLE_TIMEOUT: {{ .config.rest.idleTimeout | quote }}
   MESSAGE_BROKER_DRIVER: {{ .config.messageBroker.driver | quote }}
+  {{- if eq .config.messageBroker.driver "pubsub" }}
+  MESSAGE_BROKER_PUBSUB_PROJECT_ID: {{ .config.messageBroker.pubsub.projectID | quote }}
+  MESSAGE_BROKER_PUBSUB_TIMEOUT: {{ .config.messageBroker.pubsub.publisherTimeout | default "5s" quote }}
+  {{- end }}
+  {{- if eq .config.messageBroker.driver "kinesis" }}
   MESSAGE_BROKER_KINESIS_TIMEOUT: {{ .config.messageBroker.kinesis.timeout | default "5s" | quote }}
   MESSAGE_BROKER_KINESIS_MAX_RETRIES: {{ .config.messageBroker.kinesis.maxRetries | default "3" | quote }}
+  {{- end }}
   TOPIC_PREFIX: {{ .config.messageBroker.topicPrefix | quote }}
   SINGLE_TOPIC: {{ .config.messageBroker.singleTopic | quote }}
 {{- end }}
