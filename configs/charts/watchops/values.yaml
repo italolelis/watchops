@@ -97,12 +97,17 @@ publisher:
       # -- Defines the idle server timeout.
       idleTimeout: "30s"
     messageBroker:
-      # -- Defines which message broker to use. You can choose between kinesis or awslambda (which is also based on kinesis).
-      driver: "kinesis"
+      # -- Defines which message broker to use. You can choose between pubsub, kinesis or awslambda (which is also based on kinesis).
+      driver: "pubsub"
       # -- Whether to use a single topic for all incomming webhooks or not.
       singleTopic: false
       # -- If you defined multiple topics (one for each incoming webhook type), then you can define the prefix of these topics.
-      topicPrefix: "watchops_"
+      topicPrefix: "watchops-github"
+      pubsub:
+        # -- The project ID to use pubsub.
+        projectID: ""
+        # -- The publisher timeout. Defualts to 5s.
+        publisherTimeout: 5s
       kinesis:
         # -- Defines the timeout to call kinesis.
         timeout: 5s
@@ -138,13 +143,21 @@ subscribers:
       # -- Define the log level. Accepted values are: debug, info, warn, error.
       logLevel: "info"
       database:
-        # -- The main database driver (the event store). You can choose between postgres or redshift.
-        driver: "postgres"
+        # -- The main database driver (the event store). You can choose between biquery, postgres or redshift.
+        driver: "bigquery"
         # -- The DSN for the database. If you are using the postgres chart, you don't need to define this value.
         dsn: ""
+        bigquery:
+          # -- The project ID to use bigquery.
+          projectID: ""
       messageBroker:
-        # -- Defines which message broker to use. You can choose between kinesis or awslambda (which is also based on kinesis).
-        driver: "kinesis"
+        # -- Defines which message broker to use. You can choose between pubsub, kinesis or awslambda (which is also based on kinesis).
+        driver: "pubsub"
+        pubsub:
+          # -- The project ID to use pubsub.
+          projectID: ""
+          # -- The name of the pubsub subscription.
+          subscription: "watchops-github"
         kinesis:
           # -- Defines the timeout to call kinesis.
           timeout: 5s
@@ -244,12 +257,12 @@ prometheusRule:
 ###################################
 postgresql:
   ## WARNING:
-  ## - This is NOT SUITABLE for production deployments of Airflow,
+  ## - This is NOT SUITABLE for production deployments of Watchops,
   ##   you should seriously consider using an external database service,
   ##   which can be configured with values under: `externalDatabase`
   ##
   # -- If the `bitnami/postgresql` chart is used. set to `false` if using an external database
-  enabled: true
+  enabled: false
 
   # -- The postgres database to use
   postgresqlDatabase: watchops
