@@ -23,6 +23,5 @@ data:
   MESSAGE_BROKER_KINESIS_MAX_RETRIES: {{ .config.messageBroker.kinesis.maxRetries | default "3" | quote }}
   {{- end }}
   TOPIC_PREFIX: {{ .config.messageBroker.topicPrefix | quote }}
-  SINGLE_TOPIC: {{ .config.messageBroker.singleTopic | quote }}
 {{- end }}
 {{- end }}
