@@ -19,7 +19,7 @@ var (
 
 type SessionConfig struct {
 	ProjectID    string `split_words:"true"`
-	Subscribtion string `split_words:"true" default:"watchops_all"`
+	Subscription string `split_words:"true"`
 }
 
 // Subscriber is the kinesis subscriber.
@@ -40,7 +40,7 @@ func NewSubscriber(ctx context.Context, cfg SessionConfig) (*Subscriber, error, 
 
 	return &Subscriber{
 		client:         client,
-		SubscriptionID: cfg.Subscribtion,
+		SubscriptionID: cfg.Subscription,
 	}, nil, client.Close
 }
 

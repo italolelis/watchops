@@ -99,8 +99,6 @@ publisher:
     messageBroker:
       # -- Defines which message broker to use. You can choose between pubsub, kinesis or awslambda (which is also based on kinesis).
       driver: "pubsub"
-      # -- Whether to use a single topic for all incomming webhooks or not.
-      singleTopic: false
       # -- If you defined multiple topics (one for each incoming webhook type), then you can define the prefix of these topics.
       topicPrefix: "watchops-github"
       pubsub:
