@@ -42,7 +42,6 @@ type config struct {
 		WebhookSecret string `split_words:"true"`
 	}
 	TopicPrefix   string           `split_words:"true" default:"watchops"`
-	SingleTopic   bool             `split_words:"true" default:"true"`
 	MessageBroker publisher.Config `split_words:"true"`
 }
 
@@ -165,7 +164,7 @@ func setupProbeServer(cfg config) *http.Server {
 func setupServer(ctx context.Context, p publisher.Publisher, cfg config) *http.Server {
 	logger := log.WithContext(ctx)
 
-	webhook := wh.NewPublisherConnector(ctx, p, cfg.TopicPrefix, cfg.SingleTopic)
+	webhook := wh.NewPublisherConnector(ctx, p, cfg.TopicPrefix)
 	ghHandler := rest.NewWebhookHandler(webhook)
 
 	ghValidator := gh.NewValidator(cfg.Github.WebhookSecret)
