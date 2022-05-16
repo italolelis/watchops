@@ -19,9 +19,3 @@ resource "google_pubsub_subscription" "gitlab" {
   name    = "watchops-gitlab"
   topic   = google_pubsub_topic.gitlab.id
 }
-
-resource "google_project_iam_member" "pubsub_service_account_token_creator" {
-  project = var.project_id
-  member  = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-pubsub.iam.gserviceaccount.com"
-  role    = "roles/iam.serviceAccountTokenCreator"
-}
