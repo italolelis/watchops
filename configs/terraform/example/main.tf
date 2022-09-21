@@ -10,7 +10,7 @@ terraform {
 module "watchops" {
   source                      = "../gcp/watchops"
   project_id                  = "urbansportsclub-dev"
-  region                      = "europe-west1"
+  region                      = "europe-west3"
   bigquery_region             = "EU"
   parsers                     = ["github"]
 }
