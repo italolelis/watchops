@@ -79,7 +79,7 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 		}
 
 	default:
-		return provider.Event{}, fmt.Errorf("unsupported event type %s", e.Action)
+		return provider.Event{}, &provider.UnkownTypeError{Type: e.Action}
 	}
 
 	return event, nil

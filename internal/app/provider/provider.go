@@ -5,9 +5,19 @@ import (
 	"crypto/sha1"
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 )
+
+// UnkownTypeError represents a unkown incoming event type from the provider.
+type UnkownTypeError struct {
+	Type string
+}
+
+func (u *UnkownTypeError) Error() string {
+	return fmt.Sprintf("unsupported event type %s", u.Type)
+}
 
 // Parser holds the methods for a webhook parser.
 type Parser interface {

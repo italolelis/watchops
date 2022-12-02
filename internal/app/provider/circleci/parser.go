@@ -48,7 +48,7 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 		event.ID = e.ID
 		event.TimeCreated = e.HappenedAt
 	default:
-		return provider.Event{}, fmt.Errorf("unsupported event type %s", event.EventType)
+		return provider.Event{}, &provider.UnkownTypeError{Type: event.EventType}
 	}
 
 	return event, nil

@@ -114,7 +114,7 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 		event.ID = e.BuildID
 		event.TimeCreated = e.BuildTime()
 	default:
-		return provider.Event{}, fmt.Errorf("unsupported event type %s", e.ObjectKind)
+		return provider.Event{}, &provider.UnkownTypeError{Type: e.ObjectKind}
 	}
 
 	if event.TimeCreated.IsZero() {

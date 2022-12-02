@@ -104,7 +104,7 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 
 		event.ID = strconv.FormatInt(e.GetRelease().GetID(), 10)
 	default:
-		return provider.Event{}, fmt.Errorf("unsupported event type %s", eventType)
+		return provider.Event{}, &provider.UnkownTypeError{Type: eventType}
 	}
 
 	return event, nil
