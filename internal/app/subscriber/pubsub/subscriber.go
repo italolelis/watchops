@@ -71,7 +71,9 @@ func (s *Subscriber) Subscribe(ctx context.Context, fn func(ctx context.Context,
 
 	// Receiving messages.
 	logger.Infow("processing messages...", "sub", sub)
-	return sub.Receive(ctx, func(_ context.Context, msg *pubsub.Message) {
+	return sub.Receive(ctx, func(cctx context.Context, msg *pubsub.Message) {
+		defer msg.Ack() // We always acknowledge the message
+
 		logger.Debug("incoming message received")
 
 		var messageContainer wh.MessageContainer
@@ -86,12 +88,11 @@ func (s *Subscriber) Subscribe(ctx context.Context, fn func(ctx context.Context,
 		messageContainer.Headers["publish_time"] = append(messageContainer.Headers["publish_time"], strconv.FormatInt(arrivalTime.Unix(), 10))
 		messageContainer.Headers["source"] = append(messageContainer.Headers["source"], messageContainer.Source)
 
-		if err := fn(ctx, messageContainer.Payload, messageContainer.Headers); err != nil {
+		if err := fn(cctx, messageContainer.Payload, messageContainer.Headers); err != nil {
 			logger.Errorw("failed to process event", "err", err)
 			return
 		}
 
-		msg.Ack()
 		logger.Debug("finished processing incoming message")
 	})
 }
