@@ -65,16 +65,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | networkPolicy.enabled | bool | `false` | Whether to enable network policies. If your cluster supports it, I recommend enabling it. |
 | pdb.enabled | bool | `true` |  |
 | pdb.minAvailable | int | `1` |  |
-| postgresql.enabled | bool | `true` |  |
-| postgresql.existingSecret | string | `""` | The name of a pre-created secret containing the postgres password |
-| postgresql.existingSecretKey | string | `"postgresql-password"` | The key within `postgresql.existingSecret` containing the password string |
-| postgresql.persistence.accessModes | list | `["ReadWriteOnce"]` | The access modes of the PVC |
-| postgresql.persistence.enabled | bool | `true` |  |
-| postgresql.persistence.size | string | `"8Gi"` | The size of PVC to request |
-| postgresql.persistence.storageClass | string | `""` | The name of the StorageClass used by the PVC |
-| postgresql.postgresqlDatabase | string | `"watchops"` | The postgres database to use |
-| postgresql.postgresqlPassword | string | `"watchops"` | Tthe postgres user's password. You should NOT use this, instead specify `postgresql.existingSecret` |
-| postgresql.postgresqlUsername | string | `"watchops"` | The postgres user to create |
 | prometheusRule.annotations | object | `{}` | PrometheusRule annotations |
 | prometheusRule.enabled | bool | `false` | If enabled, a PrometheusRule resource for Prometheus Operator is created |
 | prometheusRule.groups | list | `[]` | Contents of Prometheus rules file |
@@ -132,8 +122,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | serviceMonitor.enabled | bool | `false` | Whether to enable prometheus service monitor. Enable this if you're using https://github.com/coreos/prometheus-operator. |
 | subscribers.github.affinity | object | `{}` |  |
 | subscribers.github.annotations | object | `{}` |  |
-| subscribers.github.config.database.driver | string | `"postgres"` | The main database driver (the event store). You can choose between postgres or redshift. |
-| subscribers.github.config.database.dsn | string | `""` | The DSN for the database. If you are using the postgres chart, you don't need to define this value. |
+| subscribers.github.config.database.driver | string | `"postgres"` | The main database driver (the event store). You can choose between biquery, postgres or redshift. |
+| subscribers.github.config.database.dsn | string | `""` | The DSN for the database. |
 | subscribers.github.config.logLevel | string | `"info"` | Define the log level. Accepted values are: debug, info, warn, error. |
 | subscribers.github.config.messageBroker.driver | string | `"kinesis"` | Defines which message broker to use. You can choose between kinesis or awslambda (which is also based on kinesis). |
 | subscribers.github.config.messageBroker.region | string | `"eu-central-1"` | When using AWS Kinesis, you need to set the AWS region. |

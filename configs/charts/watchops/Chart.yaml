@@ -2,15 +2,10 @@ apiVersion: v2
 appVersion: "v0.4.1"
 description: "This repository implements the four key metrics coined by Google and introduced in Accelerate: Time to Restore, Lead Time to Change, Deployment Frequency, and Change Failure Rate."
 name: watchops
-version: 1.6.1
+version: 1.6.2
 sources:
   - https://github.com/italolelis/watchops
 maintainers:
   - name: italolelis
     email: me@italovietro.com
 type: application
-dependencies:
-- name: postgresql
-  version: 10.x.x
-  repository: https://charts.bitnami.com/bitnami
-  condition: postgresql.enabled

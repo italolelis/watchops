@@ -27,14 +27,6 @@ $ helm repo update
 $ helm install my-release watchops/watchops --namespace watchops
 ```
 
-#### Use a different PostgreSQL
-
-You can configure the chart to point to a different PostgreSQL DSN if you don't want to use the built-in Postgres instance.
-
-```
-$ helm install my-release watchops/watchops --set postgresql.enabled=false --set subscriber.github.database.dsn=<your-dsn>
-```
-
 ### Upgrading the Chart
 
 To upgrade the chart with the release name `watchops`:
