@@ -22,15 +22,15 @@ jobs:
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
       - name: Install Helm
-        uses: azure/setup-helm@v1
+        uses: azure/setup-helm@v3
         with:
-          version: v3.4.0
+          version: v3.10.2
 
       - name: Helm Deps
         run: helm repo add bitnami https://charts.bitnami.com/bitnami
 
       - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.2.1
+        uses: helm/chart-releaser-action@v1.4.1
         with:
           charts_dir: configs/charts
         env:
