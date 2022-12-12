@@ -9,6 +9,7 @@ import (
 	"github.com/italolelis/watchops/internal/app/provider/gh"
 	"github.com/italolelis/watchops/internal/app/provider/gitlab"
 	"github.com/italolelis/watchops/internal/app/provider/opsgenie"
+	"github.com/italolelis/watchops/internal/app/provider/pagerduty"
 	"github.com/italolelis/watchops/internal/app/storage"
 	"github.com/italolelis/watchops/internal/app/stream"
 	"github.com/italolelis/watchops/internal/app/subscriber"
@@ -81,7 +82,8 @@ func run(ctx context.Context) error {
 		Register(&gh.Parser{}).
 		Register(&opsgenie.Parser{}).
 		Register(&gh.Parser{}).
-		Register(&gitlab.Parser{})
+		Register(&gitlab.Parser{}).
+		Register(&pagerduty.Parser{})
 
 	events := stream.NewEventDataHandler(db, pr)
 	return subs.Subscribe(ctx, events.Handle)
