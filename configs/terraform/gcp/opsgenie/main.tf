@@ -1,21 +1,28 @@
-data "google_project" "project" {
-  project_id = var.project_id
+terraform {
+  required_version = ">=1.0"
+
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 4.0"
+    }
+  }
 }
 
 resource "google_pubsub_topic" "opsgenie" {
-  project = data.project.project_id
+  project = var.project_id
   name    = "watchops-opsgenie"
 }
 
 resource "google_pubsub_topic_iam_member" "service_account_editor" {
-  project = data.project.project_id
+  project = var.project_id
   topic   = google_pubsub_topic.opsgenie.id
   role    = "roles/editor"
   member  = "serviceAccount:${var.watchops_service_account_email}"
 }
 
 resource "google_pubsub_subscription" "opsgenie" {
-  project = data.project.project_id
+  project = var.project_id
   name    = "watchops-opsgenie"
   topic   = google_pubsub_topic.opsgenie.id
 

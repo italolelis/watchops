@@ -1,3 +1,14 @@
+terraform {
+  required_version = ">=1.0"
+
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 4.0"
+    }
+  }
+}
+
 resource "google_service_account" "watchops" {
   project      = var.project_id
   account_id   = "watchops"
