@@ -44,3 +44,11 @@ module "circleci" {
   region  = var.region
   watchops_service_account_email = module.foundation.watchops_service_account_email
 }
+
+module "pagerduty" {
+  source = "../pagerduty"
+  count = contains(var.parsers, "pagerduty") ? 1 : 0
+  project_id  = var.project_id
+  region  = var.region
+  watchops_service_account_email = module.foundation.watchops_service_account_email
+}
