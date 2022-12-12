@@ -3,12 +3,6 @@ variable "project_id" {
   description = "project to deploy four keys resources to"
 }
 
-variable "region" {
-  type        = string
-  default     = "us-central1"
-  description = "Region to deploy fource keys resources in."
-}
-
 variable "bigquery_region" {
   type        = string
   default     = "US"
