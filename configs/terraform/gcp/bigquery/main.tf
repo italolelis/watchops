@@ -1,8 +1,19 @@
+terraform {
+  required_version = ">=1.0"
+
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 4.0"
+    }
+  }
+}
+
 resource "google_project_service" "bigquery_services" {
-  project                    = var.project_id
-  for_each                   = toset(["bigquery.googleapis.com"])
-  service                    = each.value
-  disable_on_destroy         = false
+  project            = var.project_id
+  for_each           = toset(["bigquery.googleapis.com"])
+  service            = each.value
+  disable_on_destroy = false
 }
 
 resource "google_project_iam_member" "parser_bq_project_access" {
@@ -71,11 +82,11 @@ resource "google_bigquery_routine" "func_json2array" {
 }
 
 resource "google_bigquery_routine" "func_multiFormatParseTimestamp" {
-  project    = var.project_id
+  project      = var.project_id
   dataset_id   = google_bigquery_dataset.watchops.dataset_id
   routine_id   = "multiFormatParseTimestamp"
   routine_type = "SCALAR_FUNCTION"
-  return_type = "{\"typeKind\" :  \"TIMESTAMP\"}"
+  return_type  = "{\"typeKind\" :  \"TIMESTAMP\"}"
   language     = "SQL"
   arguments {
     name      = "input"
