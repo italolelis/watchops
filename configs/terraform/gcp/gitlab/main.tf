@@ -18,4 +18,9 @@ resource "google_pubsub_subscription" "gitlab" {
   project = var.project_id
   name    = "watchops-gitlab"
   topic   = google_pubsub_topic.gitlab.id
+
+  retry_policy {
+    maximum_backoff = "600s"
+    minimum_backoff = "10s"
+  }
 }

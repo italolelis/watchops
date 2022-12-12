@@ -18,4 +18,9 @@ resource "google_pubsub_subscription" "circleci" {
   project = var.project_id
   name    = "watchops-circleci"
   topic   = google_pubsub_topic.circleci.id
+
+  retry_policy {
+    maximum_backoff = "600s"
+    minimum_backoff = "10s"
+  }
 }

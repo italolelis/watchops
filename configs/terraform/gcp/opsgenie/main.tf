@@ -18,4 +18,9 @@ resource "google_pubsub_subscription" "opsgenie" {
   project = var.project_id
   name    = "watchops-opsgenie"
   topic   = google_pubsub_topic.opsgenie.id
+
+  retry_policy {
+    maximum_backoff = "600s"
+    minimum_backoff = "10s"
+  }
 }
