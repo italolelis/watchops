@@ -13,10 +13,12 @@ const (
 )
 
 type event struct {
-	ID           string    `json:"id"`
-	EventType    string    `json:"event_type"`
-	ResourceType string    `json:"resource_type"`
-	OccurredAt   time.Time `json:"occurred_at"`
+	Event struct {
+		ID           string    `json:"id"`
+		EventType    string    `json:"event_type"`
+		ResourceType string    `json:"resource_type"`
+		OccurredAt   time.Time `json:"occurred_at"`
+	} `json:"event"`
 }
 
 // Parser is the GitHub webhook parser.
@@ -35,7 +37,7 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 	}
 
 	event := provider.Event{
-		EventType: e.EventType,
+		EventType: e.Event.EventType,
 		Signature: provider.GenerateSignature(payload),
 		Source:    sourceType,
 		Metadata:  payload,
@@ -45,8 +47,8 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 	switch event.EventType {
 	case "incident.triggered",
 		"incident.resolved":
-		event.ID = e.ID
-		event.TimeCreated = e.OccurredAt
+		event.ID = e.Event.ID
+		event.TimeCreated = e.Event.OccurredAt
 	default:
 		return provider.Event{}, &provider.UnkownTypeError{Type: event.EventType}
 	}
