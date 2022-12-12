@@ -3,19 +3,19 @@ data "google_project" "project" {
 }
 
 resource "google_pubsub_topic" "pagerduty" {
-  project = var.project_id
+  project = data.project.project_id
   name    = "watchops-pagerduty"
 }
 
 resource "google_pubsub_topic_iam_member" "service_account_editor" {
-  project = var.project_id
+  project = data.project.project_id
   topic   = google_pubsub_topic.pagerduty.id
   role    = "roles/editor"
   member  = "serviceAccount:${var.watchops_service_account_email}"
 }
 
 resource "google_pubsub_subscription" "pagerduty" {
-  project = var.project_id
+  project = data.project.project_id
   name    = "watchops-pagerduty"
   topic   = google_pubsub_topic.pagerduty.id
 
