@@ -5,12 +5,7 @@ variable "project_id" {
 
 variable "bigquery_region" {
   type        = string
-  default     = "US"
   description = "Region to deploy BigQuery resources in."
-  validation {
-    condition     = can(regex("^(US|EU)$", var.bigquery_region))
-    error_message = "The value for 'bigquery_region' must be one of: 'US','EU'."
-  }
 }
 
 variable "parsers" {
