@@ -14,6 +14,7 @@ import (
 	"github.com/italolelis/watchops/internal/app/http/rest"
 	"github.com/italolelis/watchops/internal/app/provider/gh"
 	"github.com/italolelis/watchops/internal/app/provider/opsgenie"
+	"github.com/italolelis/watchops/internal/app/provider/pagerduty"
 	"github.com/italolelis/watchops/internal/app/publisher"
 	"github.com/italolelis/watchops/internal/app/wh"
 	"github.com/italolelis/watchops/internal/pkg/log"
@@ -39,6 +40,9 @@ type config struct {
 		WebhookSecret string `split_words:"true"`
 	}
 	Opsgenie struct {
+		WebhookSecret string `split_words:"true"`
+	}
+	Pagerduty struct {
 		WebhookSecret string `split_words:"true"`
 	}
 	TopicPrefix   string           `split_words:"true" default:"watchops"`
@@ -169,10 +173,11 @@ func setupServer(ctx context.Context, p publisher.Publisher, cfg config) *http.S
 
 	ghValidator := gh.NewValidator(cfg.Github.WebhookSecret)
 	ogValidator := opsgenie.NewValidator(cfg.Opsgenie.WebhookSecret)
+	pdValidator := pagerduty.NewValidator(cfg.Pagerduty.WebhookSecret)
 
 	r := chi.NewRouter()
 	r.Use(log.NewStructuredLogger(logger))
-	r.Mount("/webhooks", ghHandler.Routes(ghValidator, ogValidator))
+	r.Mount("/webhooks", ghHandler.Routes(ghValidator, pdValidator, ogValidator))
 
 	return &http.Server{
 		Addr:         cfg.Web.APIHost,
