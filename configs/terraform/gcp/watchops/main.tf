@@ -1,6 +1,6 @@
 module "foundation" {
-  source                      = "../foundation"
-  project_id                  = var.project_id
+  source     = "../foundation"
+  project_id = var.project_id
 }
 
 module "bigquery" {
@@ -14,41 +14,41 @@ module "bigquery" {
 }
 
 module "github" {
-  source = "../github"
-  count = contains(var.parsers, "github") ? 1 : 0
-  project_id  = var.project_id
-  region  = var.region
+  source                         = "../github"
+  count                          = contains(var.parsers, "github") ? 1 : 0
+  project_id                     = var.project_id
+  region                         = var.region
   watchops_service_account_email = module.foundation.watchops_service_account_email
 }
 
 module "gitlab" {
-  source = "../gitlab"
-  count = contains(var.parsers, "gitlab") ? 1 : 0
-  project_id  = var.project_id
-  region  = var.region
+  source                         = "../gitlab"
+  count                          = contains(var.parsers, "gitlab") ? 1 : 0
+  project_id                     = var.project_id
+  region                         = var.region
   watchops_service_account_email = module.foundation.watchops_service_account_email
 }
 
 module "opsgenie" {
-  source = "../opsgenie"
-  count = contains(var.parsers, "opsgenie") ? 1 : 0
-  project_id  = var.project_id
-  region  = var.region
+  source                         = "../opsgenie"
+  count                          = contains(var.parsers, "opsgenie") ? 1 : 0
+  project_id                     = var.project_id
+  region                         = var.region
   watchops_service_account_email = module.foundation.watchops_service_account_email
 }
 
 module "circleci" {
-  source = "../circleci"
-  count = contains(var.parsers, "circleci") ? 1 : 0
-  project_id  = var.project_id
-  region  = var.region
+  source                         = "../circleci"
+  count                          = contains(var.parsers, "circleci") ? 1 : 0
+  project_id                     = var.project_id
+  region                         = var.region
   watchops_service_account_email = module.foundation.watchops_service_account_email
 }
 
 module "pagerduty" {
-  source = "../pagerduty"
-  count = contains(var.parsers, "pagerduty") ? 1 : 0
-  project_id  = var.project_id
-  region  = var.region
+  source                         = "../pagerduty"
+  count                          = contains(var.parsers, "pagerduty") ? 1 : 0
+  project_id                     = var.project_id
+  region                         = var.region
   watchops_service_account_email = module.foundation.watchops_service_account_email
 }
