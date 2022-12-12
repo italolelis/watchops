@@ -89,6 +89,8 @@ publisher:
     githubSecret: ""
     # -- Sets the OpsGenie secret that will be used to validate incoming webhooks from OpsGenie.
     opsgenieSecret: ""
+    # -- Sets the PagerDuty secret that will be used to validate incoming webhooks from PagerDuty.
+    pagerdutySecret: ""
     rest:
       # -- Defines the read server timeout.
       readTimeout: "30s"
@@ -189,6 +191,82 @@ subscribers:
             username: ""
             # -- The redis password. If you are using the redis chart, you don't need to define this value.
             password: ""
+  pagerduty:
+    enabled: false
+    image:
+      repository: "ghcr.io/italolelis/watchops-subscriber"
+      tag: latest
+    imagePullSecrets: []
+    replicaCount: 1
+    labels: {}
+    annotations: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: []
+    podAnnotations: {}
+    podSecurityContext: {}
+    securityContext: {}
+    livenessProbe: {}
+    readinessProbe: {}
+    resources:
+      requests:
+        cpu: 20m
+        memory: 30Mi
+      # limits:
+      #   cpu: 50m
+      #   memory: 50Mi
+    config:
+      # -- Define the log level. Accepted values are: debug, info, warn, error.
+      logLevel: "info"
+      database:
+        # -- The main database driver (the event store). You can choose between biquery, postgres or redshift.
+        driver: "bigquery"
+        # -- The DSN for the database.
+        dsn: ""
+        bigquery:
+          # -- The project ID to use bigquery.
+          projectID: ""
+      messageBroker:
+        # -- Defines which message broker to use. You can choose between pubsub, kinesis or awslambda (which is also based on kinesis).
+        driver: "pubsub"
+        pubsub:
+          # -- The project ID to use pubsub.
+          projectID: ""
+          # -- The name of the pubsub subscription.
+          subscription: "watchops-pagerduty"
+        kinesis:
+          # -- Defines the timeout to call kinesis.
+          timeout: 5s
+          # -- Defines the number of HTTP retries in case a kinesis request fails.
+          maxRetries: 3
+          # -- Sets the name of the stream this subscriber will listen to. If you are using a single stream for all webhook types, then just define the name of that stream.
+          streamName: "watchops_pagerduty"
+          # -- When using AWS Kinesis, you need to set the AWS region.
+          region: "eu-central-1"
+        store:
+          # -- The message broker storage that holds the last read record from the broker. You can choose between memory, postgres, mysql, or redis. I do not recommend using the memory store in production.
+          driver: "memory"
+          # -- The app name that is used as a namespace in the storage.
+          appName: "watchops-consumer-pagerduty"
+          postgres:
+            # -- The postgres table name.
+            tableName: "kinesis_consumer"
+            # -- The postgres database DSN. If you are using the postgres chart, you don't need to define this value.
+            dsn: ""
+          mysql:
+            # -- The mysql table name.
+            tableName: "kinesis_consumer"
+            # -- The mysql database DSN. If you are using the mysql chart, you don't need to define this value.
+            dsn: ""
+          redis:
+            # -- The redis address. If you are using the redis chart, you don't need to define this value.
+            address: ""
+            # -- The redis database. If you are using the redis chart, you don't need to define this value.
+            db: ""
+            # -- The redis username. If you are using the redis chart, you don't need to define this value.
+            username: ""
+            # -- The redis password. If you are using the redis chart, you don't need to define this value.
+            password: ""
 
 service:
   type: ClusterIP
@@ -199,14 +277,15 @@ ingress:
   # -- Enables Ingress
   enabled: false
   # -- Ingress annotations (values are templated)
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   # -- Ingress accepted hostnames
   hosts:
     - host: chart-example.local
       paths:
-        - '/'
+        - "/"
       backend:
         serviceName: chart-example.local
         servicePort: 80
