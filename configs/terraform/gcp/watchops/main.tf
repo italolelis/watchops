@@ -6,7 +6,7 @@ module "foundation" {
 module "bigquery" {
   source                         = "../bigquery"
   project_id                     = var.project_id
-  bigquery_region                = var.bigquery_region
+  bigquery_region                = var.region
   watchops_service_account_email = module.foundation.watchops_service_account_email
   depends_on = [
     module.foundation
