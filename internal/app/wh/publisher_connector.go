@@ -59,18 +59,24 @@ func (w *PublisherConnector) Write(ctx context.Context, payload []byte, headers 
 }
 
 func getSource(headers map[string][]string) string {
-	source := strings.TrimSpace(strings.Split(headers["User-Agent"][0], "/")[0])
+	if _, ok := headers["X-Gitlab-Event"]; ok {
+		return "gitlab"
+	}
 
-	// This will eventually grow. So we leave it as a switch case for now.
+	if _, ok := headers["Circleci-Event-Type"]; ok {
+		return "circleci"
+	}
+
+	if _, ok := headers["X-Pagerduty-Signature"]; ok {
+		return "pagerduty"
+	}
+
+	source := strings.TrimSpace(strings.Split(headers["User-Agent"][0], "/")[0])
 	switch source {
 	case "GitHub-Hookshot":
 		return "github"
 	case "Opsgenie Http Client":
 		return "opsgenie"
-	case "X-Gitlab-Event":
-		return "gitlab"
-	case "Circleci-Event-Type":
-		return "circleci"
 	default:
 		return ""
 	}
