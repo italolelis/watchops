@@ -3,7 +3,7 @@ module github.com/italolelis/watchops
 go 1.17
 
 require (
-	cloud.google.com/go/bigquery v1.44.0
+	cloud.google.com/go/bigquery v1.45.0
 	cloud.google.com/go/pubsub v1.28.0
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/aws/aws-lambda-go v1.27.1
@@ -51,10 +51,10 @@ require (
 )
 
 require (
-	cloud.google.com/go v0.105.0 // indirect
+	cloud.google.com/go v0.107.0 // indirect
 	cloud.google.com/go/compute v1.13.0 // indirect
 	cloud.google.com/go/compute/metadata v0.2.1 // indirect
-	cloud.google.com/go/iam v0.7.0 // indirect
+	cloud.google.com/go/iam v0.8.0 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.0.0 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.10 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.4 // indirect
@@ -75,5 +75,5 @@ require (
 	google.golang.org/api v0.103.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20221202195650-67e5cbc046fd // indirect
-	google.golang.org/grpc v1.50.1 // indirect
+	google.golang.org/grpc v1.51.0 // indirect
 )
