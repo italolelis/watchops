@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: "v0.5.0"
+appVersion: "v0.5.2"
 description: "This repository implements the four key metrics coined by Google and introduced in Accelerate: Time to Restore, Lead Time to Change, Deployment Frequency, and Change Failure Rate."
 name: watchops
-version: 1.8.0
+version: 1.8.1
 sources:
   - https://github.com/italolelis/watchops
 maintainers:
