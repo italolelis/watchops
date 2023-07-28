@@ -93,6 +93,23 @@ entries:
   watchops:
   - apiVersion: v2
     appVersion: v0.5.0
+    created: "2023-07-28T22:36:39.654559123Z"
+    description: 'This repository implements the four key metrics coined by Google
+      and introduced in Accelerate: Time to Restore, Lead Time to Change, Deployment
+      Frequency, and Change Failure Rate.'
+    digest: 4340cdb2d35be30231df62e23b3b47591266b86e6e3f4a63de849313c6f02d18
+    maintainers:
+    - email: me@italovietro.com
+      name: italolelis
+    name: watchops
+    sources:
+    - https://github.com/italolelis/watchops
+    type: application
+    urls:
+    - https://github.com/italolelis/watchops/releases/download/watchops-1.8.0/watchops-1.8.0.tgz
+    version: 1.8.0
+  - apiVersion: v2
+    appVersion: v0.5.0
     created: "2022-12-12T20:07:48.421369228Z"
     description: 'This repository implements the four key metrics coined by Google
       and introduced in Accelerate: Time to Restore, Lead Time to Change, Deployment
@@ -357,4 +374,4 @@ entries:
     urls:
     - https://github.com/italolelis/fourkeys/releases/download/watchops-1.2.3/watchops-1.2.3.tgz
     version: 1.2.3
-generated: "2022-12-12T20:07:48.421463829Z"
+generated: "2023-07-28T22:36:39.655059418Z"
