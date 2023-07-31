@@ -110,7 +110,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | publisher.securityContext | object | `{}` |  |
 | publisher.tolerations | list | `[]` |  |
 | rbac.create | bool | `true` |  |
-| rbac.pspEnabled | bool | `true` |  |
 | service.port | int | `80` |  |
 | service.probePort | int | `9090` |  |
 | service.type | string | `"ClusterIP"` |  |
