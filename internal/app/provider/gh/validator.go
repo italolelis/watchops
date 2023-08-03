@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v53/github"
 )
 
 type Validator struct {
