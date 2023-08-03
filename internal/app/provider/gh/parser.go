@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v53/github"
 	"github.com/italolelis/watchops/internal/app/provider"
 )
 
@@ -58,13 +58,13 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 		event.TimeCreated = e.GetHeadCommit().GetTimestamp().Time
 		event.ID = e.GetHeadCommit().GetID()
 	case *github.PullRequestEvent:
-		event.TimeCreated = e.GetPullRequest().GetUpdatedAt()
+		event.TimeCreated = e.GetPullRequest().GetUpdatedAt().Time
 		event.ID = strconv.Itoa(e.GetNumber())
 	case *github.PullRequestReviewEvent:
-		event.TimeCreated = e.GetReview().GetSubmittedAt()
+		event.TimeCreated = e.GetReview().GetSubmittedAt().Time
 		event.ID = strconv.FormatInt(e.GetReview().GetID(), 10)
 	case *github.PullRequestReviewCommentEvent:
-		event.TimeCreated = e.GetComment().GetUpdatedAt()
+		event.TimeCreated = e.GetComment().GetUpdatedAt().Time
 		event.ID = strconv.FormatInt(e.GetComment().GetID(), 10)
 	case *github.DeploymentEvent:
 		event.TimeCreated = e.GetDeployment().GetUpdatedAt().Time
@@ -73,10 +73,10 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 		event.TimeCreated = e.GetDeploymentStatus().GetUpdatedAt().Time
 		event.ID = strconv.FormatInt(e.GetDeploymentStatus().GetID(), 10)
 	case *github.IssuesEvent:
-		event.TimeCreated = e.GetIssue().GetUpdatedAt()
+		event.TimeCreated = e.GetIssue().GetUpdatedAt().Time
 		event.ID = e.GetRepo().GetName() + "/" + strconv.Itoa(e.GetIssue().GetNumber())
 	case *github.IssueCommentEvent:
-		event.TimeCreated = e.GetComment().GetUpdatedAt()
+		event.TimeCreated = e.GetComment().GetUpdatedAt().Time
 		event.ID = strconv.FormatInt(e.GetComment().GetID(), 10)
 	case *github.CheckRunEvent:
 		if !e.GetCheckRun().GetCompletedAt().Time.IsZero() {
@@ -87,9 +87,9 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 		event.ID = strconv.FormatInt(e.GetCheckRun().GetID(), 10)
 	case *github.CheckSuiteEvent:
 		if !e.GetCheckSuite().GetApp().GetUpdatedAt().IsZero() {
-			event.TimeCreated = e.GetCheckSuite().GetApp().GetUpdatedAt()
+			event.TimeCreated = e.GetCheckSuite().GetApp().GetUpdatedAt().Time
 		} else if !e.GetCheckSuite().GetApp().GetCreatedAt().IsZero() {
-			event.TimeCreated = e.GetCheckSuite().GetApp().GetCreatedAt()
+			event.TimeCreated = e.GetCheckSuite().GetApp().GetCreatedAt().Time
 		}
 		event.ID = strconv.FormatInt(e.GetCheckSuite().GetID(), 10)
 	case *github.StatusEvent:
@@ -103,6 +103,24 @@ func (p *Parser) Parse(headers map[string][]string, payload []byte) (provider.Ev
 		}
 
 		event.ID = strconv.FormatInt(e.GetRelease().GetID(), 10)
+
+	case *github.WorkflowJobEvent:
+		event.TimeCreated = e.GetWorkflowJob().GetStartedAt().Time
+		event.ID = strconv.FormatInt(e.GetWorkflowJob().GetID(), 10)
+
+	case *github.WorkflowRunEvent:
+		event.TimeCreated = e.GetWorkflowRun().CreatedAt.Time
+		event.ID = strconv.FormatInt(e.GetWorkflowRun().GetID(), 10)
+
+	case *github.SecurityAdvisoryEvent:
+		event.TimeCreated = e.GetSecurityAdvisory().GetPublishedAt().Time
+
+		if e.GetSecurityAdvisory().GHSAID == nil {
+			return event, errors.New("empy GHSAID")
+		}
+
+		event.ID = *e.GetSecurityAdvisory().GHSAID
+
 	default:
 		return provider.Event{}, &provider.UnkownTypeError{Type: eventType}
 	}
