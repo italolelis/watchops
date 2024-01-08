@@ -5,10 +5,9 @@ go 1.20
 require (
 	cloud.google.com/go/bigquery v1.44.0
 	cloud.google.com/go/pubsub v1.28.0
-	github.com/DATA-DOG/go-sqlmock v1.5.0
+	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/aws/aws-lambda-go v1.27.1
 	github.com/go-chi/chi v1.5.4
-	github.com/google/go-github v17.0.0+incompatible
 	github.com/heptiolabs/healthcheck v0.0.0-20180807145615-6ff867650f40
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/lib/pq v1.10.4
